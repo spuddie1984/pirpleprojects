@@ -54,15 +54,17 @@ console.log("");
 */
 
 const cake = 'vanilla';
-
+// is cake vanilla or chocolate flavoured
 if(cake === "vanilla" || cake === "chocolate"){
     console.log("You have a cake flavoured chocolate or vanilla");
     if(cake !== "chocolate"){
+        // its not chocolate :(
         console.log("This cake is not chocolate");
     }
     if(cake === "vanilla"){
         console.log("This cake is " + cake);
     }
 } else {
+    // dont have that flavoured cake sorry
     console.log("sorry the cake is neither vanilla or chocolate");
 }
