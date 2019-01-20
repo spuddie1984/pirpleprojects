@@ -15,7 +15,35 @@
     and that all members of this collection are mortal.
     You should also then demonstrate that since Socrates is part of this collection,
     it follows that he is mortal as well.
+*/
 
+const men = ["Socrates", "John", "Paul", "Daniel"];
+let n = 0;
+let hasSocrates = false;
+// lets loop through the men array and look for Socrates
+for (let man = 0; man < men.length; man++){
+    // we have found Socrates
+    if(men[man] === "Socrates"){
+        if(!hasSocrates){
+            console.log("Socrates is a man, because he is part of this men array");
+            hasSocrates = true;
+        }
+    }else if(men[man] !== "Socrates"){
+        if(n < 1){// console log once only
+            console.log("These people are men");
+            n++;
+        }
+        // lets print the names of the mortal men 
+        console.log("   " + men[man]);
+    }
+}
+// Socrates isnt mortal :(
+if(!hasSocrates){
+    console.log("Sorry to inform you but Socrates is not a Man!!");
+}
+
+console.log("");
+/*
     Extra Credit:
 
     Got the hang of creating a logical argument? Want to try another one? Try this one as well:
@@ -24,3 +52,17 @@
     This cake is not chocolate.
     Therefore, this cake is vanilla.
 */
+
+const cake = 'vanilla';
+
+if(cake === "vanilla" || cake === "chocolate"){
+    console.log("You have a cake flavoured chocolate or vanilla");
+    if(cake !== "chocolate"){
+        console.log("This cake is not chocolate");
+    }
+    if(cake === "vanilla"){
+        console.log("This cake is " + cake);
+    }
+} else {
+    console.log("sorry the cake is neither vanilla or chocolate");
+}
