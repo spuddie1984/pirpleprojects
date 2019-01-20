@@ -18,8 +18,8 @@
 */
 
 const men = ["Socrates", "John", "Paul", "Daniel"];
-let n = 0;
-let hasSocrates = false;
+let n = 0; 
+let hasSocrates = false; // So we can inform you if socrates is mortal or not !!
 // lets loop through the men array and look for Socrates
 for (let man = 0; man < men.length; man++){
     // we have found Socrates
