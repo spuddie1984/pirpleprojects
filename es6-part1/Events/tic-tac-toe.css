@@ -1,0 +1,10 @@
+#game-board{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr ;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+.single-sector{
+    height: 100px;
+    width: 100px;
+    border: solid 1px black;
+}
