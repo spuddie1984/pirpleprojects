@@ -59,8 +59,6 @@ for (let prop of gameLogic) {
 ////////////////// GAME LOGIC /////////////////////////////////
 ///////////////////////////////////////////////////////////////
 
-
-
 // check for a horizontal 3 in a row X or O
 const horizontalChecker = (array) => {
     for (let sector = 0; sector < array.length - 1; sector += 3) {
@@ -110,16 +108,27 @@ setInterval(() => {
     horizontalChecker(gameArray);
     verticalChecker(gameArray);
     diagonalChecker(gameArray);
+    catsGameChecker(gameArray);
+}, 2000);
 
-}, 1000);
-
-const catsGame = () => {
+const catsGameChecker = (array) => {
+    // check for cats game. no one wins
+    const catsGame = array.join("");
+    if(catsGame.length === 9){
+        playerWon("No one", true);
+    }
     
 }
 
 // show a message of who has won and reset for a new game
-const playerWon = (player) => {
-    alert("Player " + player + " has won!!!");
+const playerWon = (player, hasCatsGame = false) => {
+    
+    if(!hasCatsGame){
+        alert("Player " + player + " has won!!!");
+    }else if(hasCatsGame){
+        alert("Cats Game, Check out the console for a description of the meaning of Cats Game!!!");
+        console.log("https://english.stackexchange.com/questions/155621/why-is-a-tie-in-tic-tac-toe-called-a-cats-game");
+    }
     
     // reset the gameArray for the next game
     gameArray = ["", "", "", "", "", "", "", "", ""];
@@ -130,14 +139,4 @@ const playerWon = (player) => {
     }
 }
 
-
 ////////////////////// THE END ;) ////////////////////////////
-
-
-
-
-
-
-
-
-
