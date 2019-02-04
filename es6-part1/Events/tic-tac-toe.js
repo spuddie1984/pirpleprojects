@@ -62,7 +62,7 @@ for (let prop of gameLogic) {
 // check for a horizontal 3 in a row X or O
 const horizontalChecker = (array) => {
     for (let sector = 0; sector < array.length - 1; sector += 3) {
-        // check to see if the horizontal sector has a X or a O if so alert
+        // check to see if the horizontal sector has a X or a O if so run playerWon func
         if (array[sector] === "X" && array[sector + 1] === "X" && array[sector + 2] === "X") {
             playerWon("X");
         } else if (array[sector] === "O" && array[sector + 1] === "O" && array[sector + 2] === "O") {
@@ -74,7 +74,7 @@ const horizontalChecker = (array) => {
 // check for a horizontal 3 in a row X or O 
 const verticalChecker = (array) => {
     for (let sector = 0; sector < 3; sector++) {
-        // check to see if the vertical sector has a X or a O if so alert
+        // check to see if the vertical sector has a X or a O if so run playerWon func
         if (array[sector] === "X" && array[sector + 3] === "X" && array[sector + 6] === "X") {
             playerWon("X");
         } else if (array[sector] === "O" && array[sector + 3] === "O" && array[sector + 6] === "O") {
@@ -85,12 +85,14 @@ const verticalChecker = (array) => {
 
 // check for diagonal 3 in a row X or O
 const diagonalChecker = (array) => {
-
+    // check to see if the left diagonal sector has a X or a O if so run playerWon func
     if (array[0] === "X" && array[4] === "X" && array[8] === "X") {
         playerWon("X");
     } else if (array[0] === "O" && array[4] === "O" && array[8] === "O") {
         playerWon("O");
     }
+    
+    // check to see if the right diagonal sector has a X or a O if so run playerWon func
     if (array[2] === "X" && array[4] === "X" && array[6] === "X") {
         playerWon("X");
     } else if (array[2] === "O" && array[4] === "O" && array[6] === "O") {
@@ -102,17 +104,18 @@ const diagonalChecker = (array) => {
 /////////////// CHECK FOR WINNING GAME AND RESET ///////////////////
 ////////////////////////////////////////////////////////////////////
 
-// check for winning condition every second
+// check for winning condition every 2 seconds
 setInterval(() => {
 
     horizontalChecker(gameArray);
     verticalChecker(gameArray);
     diagonalChecker(gameArray);
     catsGameChecker(gameArray);
+
 }, 2000);
 
 const catsGameChecker = (array) => {
-    // check for cats game. no one wins
+    // check for cats game. In other words --> NO ONE WINS
     const catsGame = array.join("");
     if(catsGame.length === 9){
         playerWon("No one", true);
@@ -120,7 +123,8 @@ const catsGameChecker = (array) => {
     
 }
 
-// show a message of who has won and reset for a new game
+// show a message of who has won, if no one won show a different message
+// after message reset the game
 const playerWon = (player, hasCatsGame = false) => {
     
     if(!hasCatsGame){
