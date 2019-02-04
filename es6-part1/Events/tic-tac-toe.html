@@ -28,20 +28,22 @@ one accompanying JS file, and one accompanying CSS file.
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="tic-tac-toe.css" />
-    <script src="tic-tac-toe.js z"></script>
+    
 </head>
 <body>
-    <!-- sector-abbreviation for top left, top middle, top right, etc..... -->
+    <h1>The Tic Tac Toe Game !!</h1>
+    <!-- #id = "sector-tl == top left and so on..... -->
     <div id="game-board">
-        <div class="single-sector" id="sector-tl"></div>
-        <div class="single-sector" id="sector-tm"></div>
-        <div class="single-sector" id="sector-tr"></div>
-        <div class="single-sector" id="sector-ml"></div>
-        <div class="single-sector" id="sector-mm"></div>
-        <div class="single-sector" id="sector-mr"></div>
-        <div class="single-sector" id="sector-bl"></div>
-        <div class="single-sector" id="sector-bm"></div>
-        <div class="single-sector" id="sector-br"></div>
+        <div class="single-sector" id="sector-tl" data-sector="1"></div>
+        <div class="single-sector" id="sector-tm" data-sector="2"></div>
+        <div class="single-sector" id="sector-tr" data-sector="3"></div>
+        <div class="single-sector" id="sector-ml" data-sector="4"></div>
+        <div class="single-sector" id="sector-mm" data-sector="5"></div>
+        <div class="single-sector" id="sector-mr" data-sector="6"></div>
+        <div class="single-sector" id="sector-bl" data-sector="7"></div>
+        <div class="single-sector" id="sector-bm" data-sector="8"></div>
+        <div class="single-sector" id="sector-br" data-sector="9"></div>
     </div>
+    <script src="tic-tac-toe.js"></script>
 </body>
 </html>
