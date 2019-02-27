@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Todo List</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="todo.css" />
     <script src="todo.js"></script>
 </head>
@@ -22,10 +24,10 @@
         <form id="login-form">
             <!-- email input -->
             <label for="user-email"></label>
-                <input type="email" placeholder="Your Email Address" name="email" id="user-email">
+                <input type="email" placeholder="Email Address" name="email" id="user-email">
             <!-- password input -->
             <label for="user-password"></label>
-                <input type="password" placeholder="Your Password" name="password" id="user-password">
+                <input type="password" placeholder="Password" name="password" id="user-password">
 
             <button type="submit">Login</button>
             
@@ -47,9 +49,11 @@
             <label for="user-signup-password"></label>
                 <input type="password" placeholder="Password" name="signuppassword" id="user-signup-password">
             <!-- agree to terms checkbox -->
-            <label for="terms"></label>
-                <input type="checkbox" name="terms" id="terms">
-                <span>I Agree to the Terms of Use</span>
+            <label id="terms">
+                <input type="checkbox" name="terms">
+                <span id="terms-of-use">I Agree to the Terms of Use</span>
+            </label>
+                
             
             <button type="submit">Sign Up</button>
         </form>
@@ -59,6 +63,12 @@
             <button>settings</button>
             <button>Log Out</button>         
         </nav>
+        <article id="new-todo">
+            <button><i class="fas fa-plus"></i></button>
+        </article>
+        <article class="todo-lists">
+
+        </article>
     </div>
 </body>
 </html>
