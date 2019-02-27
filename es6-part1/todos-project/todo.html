@@ -11,64 +11,93 @@
     <script src="todo.js"></script>
 </head>
 <body>
+
+    <!-- START PAGE SECTION -->
     <div class="start-page">
+    
         <h1>The TODO Application</h1>
         <p>Please Login or Signup so that you can start making a TODO list or add/modify an existing one.</p>
+    
         <form id="start-form">
-            <button id="start-page-login-button">LogIn</button>
-            <button id="start-page-signup-button">SignUp</button>
+            <button class="custom-button-styles" id="start-page-login-button">LogIn</button>
+            <button class="custom-button-styles" id="start-page-signup-button">SignUp</button>
         </form>
+    
     </div>
+    
+    <!-- LOGIN PAGE SECTION -->
     <div id="login-page">
+    
         <!-- login form -->
         <form id="login-form">
+    
             <!-- email input -->
             <label for="user-email"></label>
                 <input type="email" placeholder="Email Address" name="email" id="user-email">
+    
             <!-- password input -->
             <label for="user-password"></label>
                 <input type="password" placeholder="Password" name="password" id="user-password">
 
-            <button type="submit">Login</button>
+            <button class="custom-button-styles" type="submit">Login</button>
             
         </form>
+    
     </div>
+
+    <!-- SIGNUP FORM SECTION -->
     <div id=signup-page>
+    
         <!-- signup form -->
         <form id="signup-form">
+    
             <!-- new users first name -->
             <label for="first-name"></label>
                 <input type="text" placeholder="First Name" name="firstname" id="first-name">
+    
             <!-- new users last name -->
             <label for="last-name"></label>
                 <input type="text" placeholder="Last Name" name="lastname" id="last-name">
+    
             <!-- new users email address -->
             <label for="user-signup-email"></label>
                 <input type="email" placeholder="Email Address" name="signupemail" id="user-signup-email">
+    
             <!-- new users password -->
             <label for="user-signup-password"></label>
                 <input type="password" placeholder="Password" name="signuppassword" id="user-signup-password">
+    
             <!-- agree to terms checkbox -->
             <label id="terms">
                 <input type="checkbox" name="terms">
                 <span id="terms-of-use">I Agree to the Terms of Use</span>
             </label>
-                
-            
-            <button type="submit">Sign Up</button>
+    
+            <!-- a button to submit all the data -->
+            <button class="custom-button-styles" type="submit">Sign Up</button>
+    
         </form>
+    
     </div>
+
+    <!-- DASHBOARD PAGE SECTION -->
     <div id="dashboard-page">
-        <nav>
-            <button>settings</button>
-            <button>Log Out</button>         
+    
+        <nav class="nav-menu">
+            <button class="alt-button-style nav-menu-buttons"><i class="fas fa-sliders-h fa-lg"></i></button>
+            <button class="alt-button-style nav-menu-buttons"><i class="fas fa-sign-out-alt fa-lg"></i></button>         
         </nav>
+    
+        <!-- this new-todo is always visible while on the dashboard page -->
         <article id="new-todo">
-            <button><i class="fas fa-plus"></i></button>
+            <button class="alt-button-style"><i class="fas fa-plus fa-4x"></i></button>
         </article>
+
+        <!-- for user to add todo lists -->
         <article class="todo-lists">
 
         </article>
     </div>
+
 </body>
 </html>
