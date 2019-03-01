@@ -133,6 +133,7 @@ input:focus{
     display: flex;
     justify-content: center;
     margin: 1%;
+    margin-top: 4%;
     padding: 5%;
     border: solid black 2px;
 }
