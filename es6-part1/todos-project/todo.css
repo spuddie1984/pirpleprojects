@@ -46,7 +46,7 @@ input:focus{
 
 /* start page section */
 
-.start-page{
+#start-page{
 
     max-width: 20%;
     border-radius: 10px;
@@ -93,9 +93,23 @@ input:focus{
     display: inline-flex;
 }
 
+#terms input[type="checkbox"]{
+    width: 20px;
+    height: 20px;
+}
+
 #terms-of-use{
-    margin-left: 10px;
-    padding-top: 2px;
+    margin-left: 6px;
+    padding-top: 4px;
+    font-size: 1rem;
+}
+
+/* error message */
+#first-name-error-message, #last-name-error-message, #email-error-message, #password-error-message, #terms-error-message, #invalid-email-error-message, #user-doesnt-exist{
+    display: none;
+    color: red;
+    font-size: 1rem;
+    margin-bottom: 10px;
 }
 
 /* dashboard section */

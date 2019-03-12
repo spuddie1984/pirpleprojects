@@ -13,7 +13,7 @@
 <body>
 
     <!-- START PAGE SECTION -->
-    <div class="start-page">
+    <div id="start-page">
     
         <h1>The TODO Application</h1>
         <p>Please Login or Signup so that you can start making a TODO list or add/modify an existing one.</p>
@@ -31,15 +31,19 @@
         <!-- login form -->
         <form id="login-form">
     
+            <div id="invalid-email-error-message">Please Enter a valid email Address</div>
+
             <!-- email input -->
             <label for="user-email"></label>
                 <input type="email" placeholder="Email Address" name="email" id="user-email">
-    
+            
             <!-- password input -->
             <label for="user-password"></label>
                 <input type="password" placeholder="Password" name="password" id="user-password">
 
-            <button class="custom-button-styles" type="submit">Login</button>
+            <div id="user-doesnt-exist">Sorry that user doesn't exist in our database, please signup !</div>
+
+            <button class="custom-button-styles" id="loginFormSubmitButton" type="submit">Login</button>
             
         </form>
     
@@ -51,30 +55,40 @@
         <!-- signup form -->
         <form id="signup-form">
     
+            <div id="first-name-error-message">First Name Please</div>
+
             <!-- new users first name -->
             <label for="first-name"></label>
                 <input type="text" placeholder="First Name" name="firstname" id="first-name">
-    
+
+            <div id="last-name-error-message">Last Name Please</div>
+
             <!-- new users last name -->
             <label for="last-name"></label>
                 <input type="text" placeholder="Last Name" name="lastname" id="last-name">
     
+            <div id="email-error-message">Valid Email Please</div>
+
             <!-- new users email address -->
             <label for="user-signup-email"></label>
                 <input type="email" placeholder="Email Address" name="signupemail" id="user-signup-email">
-    
+
+            <div id="password-error-message">Password Please</div>
+
             <!-- new users password -->
             <label for="user-signup-password"></label>
                 <input type="password" placeholder="Password" name="signuppassword" id="user-signup-password">
-    
+                
+            <div id="terms-error-message">Please click the terms box</div>
+
             <!-- agree to terms checkbox -->
             <label id="terms">
-                <input type="checkbox" name="terms">
+                <input type="checkbox" name="terms" id="terms-checkbox">
                 <span id="terms-of-use">I Agree to the Terms of Use</span>
-            </label>
-    
+            </label> 
+
             <!-- a button to submit all the data -->
-            <button class="custom-button-styles" type="submit">Sign Up</button>
+            <button class="custom-button-styles" id="signupFormSubmitButton" type="submit">Sign Up</button>
     
         </form>
     
