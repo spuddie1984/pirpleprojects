@@ -36,93 +36,80 @@ const loginChecker = (event) => {
     }
 } 
 
-// function to validate any user inputs for errors
-const inputValidator = function(input, context,signupForm = false) {
+// does what it's called input validation 101
+const inputValidator = (input) => {
     // email regular expression
     let emailRegEx = /\S+@\S+\.\S+/;
     // text regular expression
     let textRegEx = /[^A-z]/ ;
-    console.log(input.type);
-    if(!signupForm){
-        
-        // check for an input value
-        if(input.type === "email"){
-            if(input.value.length < 1){
-                context.querySelector("#invalid-email-error-message").style.display = "block";
+    
+    // make sure someone has enter something ;p
+    if(input.value < 1){
+        return false;
 
-             // check if email contains invalid characters
-            }else if(!emailRegEx.test(input.value)){
-                 console.log("email invalid, please enter a valid email address");
-                 context.querySelector("#invalid-email-error-message").style.display = "block";
-            }else{
-                 context.querySelector("#invalid-email-error-message").style.display = "none";
+    // return true if entered email passes test
+    }else if(input.type === "email"){
+        return emailRegEx.test(input.value);
 
-            }    
-        }else if(input.type === "password"){
-            // check localStorage for a match for username and password
-        }
-    }else if(signupForm){
-        // check text boxes first
-        if(input.id === "first-name"){
-            if(input.value.length < 1){
-                context.querySelector("#first-name-error-message").style.display = "block";     
-            }else if(textRegEx.test(input.value)){
-                context.querySelector("#first-name-error-message").style.display = "block";   
-            }else if(!textRegEx.test(input.value)){
-                context.querySelector("#first-name-error-message").style.display = "none";
-            }
-        }else if(input.id === "last-name"){
-            if(input.value.length < 1){
-                context.querySelector("#last-name-error-message").style.display = "block";     
-            }else if(textRegEx.test(input.value)){
-                context.querySelector("#last-name-error-message").style.display = "block";   
-            }else if(!textRegEx.test(input.value)){
-                context.querySelector("#last-name-error-message").style.display = "none";
-            }    
+    // return true if full valid name entered
+    }else if(input.type === "text"){
+        return !textRegEx.test(input.value);
 
-        // now check email inputs
-        }else if(input.type === "email"){
-            if(!emailRegEx.test(input.value)){
-                context.querySelector("#email-error-message").style.display = "block";   
-            }else if(emailRegEx.test(input.value)){
-                context.querySelector("#email-error-message").style.display = "none";
-            }
+    // make sure they agree with the terms and conditions
+    }else if(input.type === "checkbox"){
+        return input.checked;
 
-        // now check password inputs
-        }else if(input.type === "password"){
-
-            console.log("password");
-            if(input.value.length < 1){
-                context.querySelector("#password-error-message").style.display = "block";    
-            }else if(input.value.length > 1){
-                context.querySelector("#password-error-message").style.display = "none";
-            }
-        // last of all, check the checkbox :P
-        }else if(input.type === "checkbox"){
-            if(!context.querySelector("#terms-checkbox").checked){
-                context.querySelector("#terms-error-message").style.display = "block";
-            }else{
-                context.querySelector("#terms-error-message").style.display = "none";
-                
-            }    
-        }
+    // if you want to add more validator arguements do so here .....
+    
+    // Yay !!! the form can be submitted it passed all the tests
+    }else {
+        return true;
     }
 }
 
-// check each input for  validation if all inputs have been validated then remove error-message
-
-// check each input in a chosen form, send individual inputs to the input validator for validation and error checking
+// check each input in a chosen form, check each input with the inputValidator function
 const formInputElementChecker = (input) => {
-    const inputList = input.getElementsByTagName("input");
-    for(let inputs = 0; inputs < inputList.length ; inputs++){
-        // // inputChecker(inputList[inputs],inputList[inputs].type);
-        if(input.id === "signup-form"){
-            inputValidator(inputList[inputs], input, true);
-        }else if(input.id === "login-form"){
-            inputValidator(inputList[inputs], input);
+
+    // grab all the input elements and convert into an array
+    const formElements = [...input.getElementsByTagName("input")];
+
+    // check each input for  validation if all inputs have been validated then remove error-message
+    // validate each input according to conditions in the inputValidator
+    if(!formElements.every(inputValidator)){
+
+        // show error message if input isnt valid
+        if(input.id === "login-form"){
+            input.querySelector("#login-form-error-message").style.display = "block";
+        }else if(input.id === "signup-form"){
+            input.querySelector("#signup-form-error-message").style.display = "block";
+        }
+    }else if(formElements.every(inputValidator)){
+        for(let element of formElements){
+            if(element.type !== "checkbox"){
+                console.log(element);
+            }
         }
         
+        // hide error message and send login details to localStorage
+        if(input.id === "login-form"){
+            input.querySelector("#login-form-error-message").style.display = "none";
+        }else{
+            input.querySelector("#signup-form-error-message").style.display = "none";
+        }
     }
+    // for testing purposes......
+    console.log(formElements.every(inputValidator));
+
+    // const inputList = input.getElementsByTagName("input");
+    // for(let inputs = 0; inputs < inputList.length ; inputs++){
+    //     // // inputChecker(inputList[inputs],inputList[inputs].type);
+    //     if(input.id === "signup-form"){
+    //         inputValidator(inputList[inputs], input, true);
+    //     }else if(input.id === "login-form"){
+    //         inputValidator(inputList[inputs], input);
+    //     }
+        
+    // }
 }
 
 const loginFormFunction = function (event) {
@@ -162,5 +149,3 @@ const startPageLoad = () => {
 
 // page load or page refresh event listener
 const pageLoad = document.addEventListener("DOMContentLoaded", startPageLoad);
-
-
