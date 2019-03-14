@@ -86,7 +86,7 @@ const formInputElementChecker = (input) => {
     }else if(formElements.every(inputValidator)){
         for(let element of formElements){
             if(element.type !== "checkbox"){
-                console.log(element);
+                if(element.name !== "login-email" && element.name !== "login-password" )
             }
         }
         
@@ -99,18 +99,6 @@ const formInputElementChecker = (input) => {
     }
     // for testing purposes......
     console.log(formElements.every(inputValidator));
-
-    // const inputList = input.getElementsByTagName("input");
-    // for(let inputs = 0; inputs < inputList.length ; inputs++){
-    //     // // inputChecker(inputList[inputs],inputList[inputs].type);
-    //     if(input.id === "signup-form"){
-    //         inputValidator(inputList[inputs], input, true);
-    //     }else if(input.id === "login-form"){
-    //         inputValidator(inputList[inputs], input);
-    //     }
-        
-    // }
-}
 
 const loginFormFunction = function (event) {
     // every submit button click check the form input elements
