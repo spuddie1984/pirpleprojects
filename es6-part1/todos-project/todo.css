@@ -2,6 +2,8 @@
 body{
     background-image: linear-gradient(to right,rgb(224, 224, 224,1), rgb(36, 217, 226,1), rgb(224, 224, 224,1));
     font-family: monospace !important;
+    margin: 0;
+
 }
 
 /* general styling for the whole application */
@@ -59,7 +61,7 @@ input:focus{
 }
 
 #start-page-login-button{
-    padding: 4% 12.5%;
+    padding: 4% 11.57%;
 }
 
 /* login page section */
@@ -105,7 +107,21 @@ input:focus{
 }
 
 /* error message */
-#login-form-error-message, #signup-form-error-message, #first-name-error-message, #last-name-error-message, #email-error-message, #password-error-message, #terms-error-message, #invalid-email-error-message, #user-doesnt-exist{
+#invalid-email-error-message, #user-doesnt-exist-error-message, #user-exists-error-message{
+    display: none;
+    color: red;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+#login-form-error-message, #signup-form-error-message, #first-name-error-message, #last-name-error-message{
+    display: none;
+    color: red;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+#email-error-message, #password-error-message, #terms-error-message{
     display: none;
     color: red;
     font-size: 1rem;
@@ -135,19 +151,73 @@ input:focus{
     padding-left: 1%;
 }
 
+/* user settings  */
+
+.user-settings-div{
+    display: none;
+    max-width: 50%;
+    height: auto;
+    margin: 5% auto;
+    border: solid black 3px;
+    box-shadow: 0 0 5px black;
+
+}
+.user-settings-div p{
+    text-align: center;
+}
+
+.user-settings-div h2{
+    text-align: center;
+}
+
+#user-details-section{
+    display: grid;
+}
+
+.user-settings-display-toggle{
+    display: block;
+    
+}
+.user-settings-close-button{
+    position: relative;
+    top: 4px;
+    left: 96%;
+    background: none;
+    outline: none;
+    border:none;
+}
+
+.delete-account-button{
+    padding: 1% 2%;
+    color: red;
+}
+
 #dashboard-page{
     display: grid;
 }
 
-#dashboard-page article{
-    width: 200px;
-    height: 200px;
+/* todo list stuff */
+
+.todo{
+    width: 300px;
+    height: 300px;
 }
-#new-todo{
+
+.new-todo{
     display: flex;
     justify-content: center;
+    align-items: center;
     margin: 1%;
     margin-top: 4%;
-    padding: 5%;
     border: solid black 2px;
+}
+
+#a-todo-list{
+    display: none;
+}
+
+#todo-list-title{
+    display: none;
+    max-height: 20px;
+    margin-top: 2%
 }

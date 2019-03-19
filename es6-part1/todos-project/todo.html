@@ -41,7 +41,7 @@
             <label for="user-password"></label>
                 <input type="password" placeholder="Password" name="login-password" id="user-password">
 
-            <div id="user-doesnt-exist">Sorry that user doesn't exist in our database, please signup !</div>
+            <div id="user-doesnt-exist-error-message">Sorry that user doesn't exist in our database, please signup !</div>
 
             <div id="login-form-error-message">Please fill in all the fields</div>
 
@@ -61,25 +61,25 @@
 
             <!-- new users first name -->
             <label for="first-name"></label>
-                <input type="text" placeholder="First Name" name="firstname" id="first-name">
+                <input type="text" placeholder="First Name" name="first-name" id="first-name">
 
             <div id="last-name-error-message">Last Name Please</div>
 
             <!-- new users last name -->
             <label for="last-name"></label>
-                <input type="text" placeholder="Last Name" name="lastname" id="last-name">
+                <input type="text" placeholder="Last Name" name="last-name" id="last-name">
     
             <div id="email-error-message">Valid Email Please</div>
 
             <!-- new users email address -->
             <label for="user-signup-email"></label>
-                <input type="email" placeholder="Email Address" name="signupemail" id="user-signup-email">
+                <input type="email" placeholder="Email Address" name="signup-email" id="user-signup-email">
 
             <div id="password-error-message">Password Please</div>
 
             <!-- new users password -->
             <label for="user-signup-password"></label>
-                <input type="password" placeholder="Password" name="signuppassword" id="user-signup-password">
+                <input type="password" placeholder="Password" name="signup-password" id="user-signup-password">
                 
             <div id="terms-error-message">Please click the terms box</div>
 
@@ -90,6 +90,8 @@
             </label> 
 
             <div id="signup-form-error-message">Please fill out all the details</div>
+
+            <div id="user-exists-error-message">Sorry that users email already exists, please use a different one</div>
 
             <!-- a button to submit all the data -->
             <button class="custom-button-styles" id="signupFormSubmitButton" type="submit">Sign Up</button>
@@ -102,13 +104,27 @@
     <div id="dashboard-page">
     
         <nav class="nav-menu">
-            <button class="alt-button-style nav-menu-buttons"><i class="fas fa-sliders-h fa-lg"></i></button>
-            <button class="alt-button-style nav-menu-buttons"><i class="fas fa-sign-out-alt fa-lg"></i></button>         
+            <button class="alt-button-style nav-menu-buttons" id="user-settings-button"><i class="fas fa-sliders-h fa-lg"></i></button>
+            <button class="alt-button-style nav-menu-buttons" id="user-signout"><i class="fas fa-sign-out-alt fa-lg"></i></button>         
         </nav>
-    
+        <div class="user-settings-div">
+            <button class="user-settings-close-button"><i class="fas fa-times"></i></button>
+            <h2>User Settings</h2>
+            <section id="user-details-section">
+                <span id="first-name-change"></span> <button>edit</button>
+                <span id="last-name-change"></span> <button>edit</button>
+                <span id="password-change"></span> <button>edit</button>
+            </section>
+            <button class="custom-button-styles delete-account-button">Delete Account</button>
+        </div>
         <!-- this new-todo is always visible while on the dashboard page -->
-        <article id="new-todo">
-            <button class="alt-button-style"><i class="fas fa-plus fa-4x"></i></button>
+        <article class="todo new-todo">
+            <button class="alt-button-style" id="new-todo-button"><i class="fas fa-plus fa-4x"></i></button>
+            <label for="todo-list-title"></label>
+            <input type="text" id="todo-list-title" name="todo-list-title" placeholder="Todo Name Please">
+            <ul id="a-todo-list">
+
+            </ul>
         </article>
 
         <!-- for user to add todo lists -->
