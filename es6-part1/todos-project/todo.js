@@ -17,37 +17,64 @@ const pageRestart = () => {
 
 ////////////////////////////////// DASHBOARD //////////////////////////////////
 
-
+// on user settings button click show user settings box(div)
 const userSettings = (event) => {
     const userSettings = document.querySelector(".user-settings-div");    
-    userSettings.classList.add("user-settings-display-toggle");
+    userSettings.classList.add("user-settings-display-toggle"); 
 }
 
-const closeUserSettings = (event) => {
+// grab the currently logged in user details and display them in the user settings box(div)
+const userSettingsFunction = (details) => {
+    
+    const getUserInfo = JSON.parse(localStorage.getItem(details.email));
+    document.querySelector("#first-name-change").value = getUserInfo.firstName;
+    document.querySelector("#last-name-change").value = getUserInfo.lastName;
+    document.querySelector("#password-change").value = getUserInfo.password;
+    
+    // return for later use
+    return getUserInfo;
+}
+ 
+// show users password when a user clicks and holds the mouse button
+const showPassword = (event) => {
+    const pswdInput = document.querySelector("#password-change");
+    if(pswdInput.type === "password"){
+        pswdInput.type = "text";
+    }else {
+        pswdInput.type = "password";
+    }
+}
+
+// on the close button click close the user settings box(div)
+const closeUserSettings = () => {
     document.querySelector(".user-settings-div").classList.remove("user-settings-display-toggle");
+    document.querySelector("#user-details-success").style.display = "none";
 }
 
-// sign out on signout button click
+// exactly like it sounds log the user out
 const userSignOut = () => {
     
     // basically reload the page so that the start page is shown
     pageRestart();
 }
 
-
+// show a new todo on every loggin users dashboard page
 function newTodo (event){
     this.querySelector("#new-todo-button").style.display = "none";
-    this.querySelector("#todo-list-title").style.display = "flex";
+    this.querySelector("#todo-list-title-input").style.display = "flex";
 }
 
-function enterNewTodo(keyboardEvent) {
+// when enter is clicked move on to the next input
+function enterNewTodo(keyboardEvent) { 
     if(keyboardEvent.keyCode === 13){
-        console.log(keyboardEvent);
-        this.value = "";
+        this.style.display = "none";
+        document.querySelector("#todo-list-title").innerHTML = this.value;
+        document.querySelector("#todo-list-title").style.display = "block";
     }
     
 }
 
+// for list modification purposes
 const usersLists = (lists) => {
 
 }
@@ -57,25 +84,52 @@ const usersLists = (lists) => {
 const loggedIn = (user) => {
     // oh glorious dashboard
     document.querySelector("#dashboard-page").style.display = "block";
-    // if a user has lists show them in the dashboard
-    usersLists(user);
+    
+    // lets grab the currently logged in users details
+    // for further use in the settings box(div), and beyond....
+    const currentlyLoggedInUserDetails = userSettingsFunction(user);
 
+    // grab the email of the current user this is used to identify the person logged in
+    const currentlyLoggedInUser = user.email;
+    console.log(currentlyLoggedInUser);
+
+    // user details callback
+    function editUserDetails(event) {
+        // check for button click
+        if(event.target.id === "submit-user-detail-changes"){
+            
+            // validate input data and pass current user details
+            // to validation function so we can update that users details after validation
+            formInputElementChecker(this,currentlyLoggedInUserDetails);
+        }else if(event.target.id === "delete-user-button"){
+            localStorage.removeItem(currentlyLoggedInUser);
+            pageRestart();
+            
+        }
+    }
     // possibly move all these listeners to the main page load func
     document.querySelector("#user-settings-button").addEventListener("click", userSettings);
+    document.querySelector(".user-settings-div").addEventListener("click", editUserDetails);
     document.querySelector("#user-signout").addEventListener("click", userSignOut);
     document.querySelector(".new-todo").addEventListener("click", newTodo);
     document.querySelector(".user-settings-close-button").addEventListener("click", closeUserSettings);
-    document.querySelector("#todo-list-title").addEventListener("keydown", enterNewTodo);
+    document.querySelector("#todo-list-title-input").addEventListener("keydown", enterNewTodo);
+    document.querySelector("#show-password-button").addEventListener("click", showPassword);
+    // could attach this event listener's function to the submit button function for the
+    //  main login and signup forms but for modularity reasons i will leave it hear
+    // (try to keep all the related code together, for easier reading :) ) 
+    
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 
 ////////////////////////////////// VALIDATION //////////////////////////////////
 
 
 // check each input in a chosen form, check each input with the inputValidator function
-const formInputElementChecker = (input) => {
+const formInputElementChecker = (input,loggedInUser) => {
 
     // grab all the input elements and convert into an array
     const formElements = [...input.getElementsByTagName("input")];
@@ -89,18 +143,22 @@ const formInputElementChecker = (input) => {
             input.querySelector("#login-form-error-message").style.display = "block";
         }else if(input.id === "signup-form"){
             input.querySelector("#signup-form-error-message").style.display = "block";
+        }else if(input.id === "user-settings"){
+            input.querySelector("#user-details-error-message").style.display = "block";
         }
     }else if(formElements.every(inputValidator)){
        
         // hide error message and send login details to localStorage
         if(input.id === "login-form"){
             input.querySelector("#login-form-error-message").style.display = "none";
-        }else{
+        }else if(input.id === "signup-form"){
             input.querySelector("#signup-form-error-message").style.display = "none";
+        }else if(input.id === "user-settings"){
+            input.querySelector("#user-details-error-message").style.display = "none";
         }
 
         // lets get or set the inputted details
-        localStorageCheckerSetter(input);
+        localStorageCheckerSetter(input,loggedInUser);
     }
               
     // for testing purposes......
@@ -115,7 +173,7 @@ const inputValidator = (input) => {
     let textRegEx = /[^A-z]/ ;
     
     // make sure someone has enter something ;p
-    if(input.value < 1){
+    if(input.type !== "password" && input.value < 1){
         return false;
 
     // return true if entered email passes test
@@ -138,9 +196,8 @@ const inputValidator = (input) => {
     }
 }
 
-
 // for retrieving user data and for setting user data into localStorage 
-const localStorageCheckerSetter = (elements) => {
+const localStorageCheckerSetter = (elements, loggedInUser) => {
     
     // new user data object
     const newUser = {
@@ -156,7 +213,8 @@ const localStorageCheckerSetter = (elements) => {
         "password" : "",
     };
 
-    if(elements.id !== "login-form"){
+    if(elements.id !== "login-form" && elements.id !== "user-settings"){
+        // make sure that user doesnt already exist
         if(localStorage.getItem(elements.querySelector("#user-signup-email").value) === null){
             
             // put new users details into a object to stringify
@@ -173,29 +231,89 @@ const localStorageCheckerSetter = (elements) => {
             loggedIn(newUser);
             
         }else{
+            // that user already exists
             document.querySelector("#user-exists-error-message").style.display = "block";
         }
     }else if(elements.id === "login-form"){
+        // lets log in
         existingUser.email = elements.querySelector("#user-email").value;
         existingUser.password = elements.querySelector("#user-password").value;
+        // check to see if that user exists in localstorage
         if(localStorage.getItem(existingUser.email) === null){
+            // if user doesnt exist show error message and reset form inputs
             document.querySelector("#login-form").reset();
             elements.querySelector("#user-doesnt-exist-error-message").style.display = "block";
-            
+            // if user exists  in localStorage then go to the dashboard
         }else{
             elements.querySelector("#user-doesnt-exist-error-message").style.display = "none";
             document.querySelector("#login-page").style.display = "none";
+            document.querySelector("#login-form").reset();
 
             // need to check password here
             // consider having a password hasher here
-            loggedIn(existingUser);
-            
-            
+            // lets go to the dashboard
+            loggedIn(existingUser);             
         }
 
-    }
-}
+    }else if(elements.id === "user-settings"){
+        
+        // use an object literal and fill it with the users details to be sent to localStorage
+        const updateUserDetails = {};
+        updateUserDetails.firstName = elements.querySelector("#first-name-change").value;
+        updateUserDetails.lastName = elements.querySelector("#last-name-change").value;
+        
+        
+        // make the if statements shorter
+        const newPassword = elements.querySelector("#new-password");
+        const reEnteredPsd = elements.querySelector("#re-entered-password");
+        
+        // check to see if user has attempted a password change
+        if(newPassword.value.length > 1 || reEnteredPsd.value.length > 1){
+            
+            // make sure the user enters the desired password with a password recheck
+            if(newPassword.value !== reEnteredPsd.value){
+                elements.querySelector("#new-password-error-message").style.display = "block";
 
+            // all is good so send the new password and details to localStorage 
+            }else if(newPassword.value === reEnteredPsd.value){
+                
+
+                elements.querySelector("#new-password-error-message").style.display = "none";
+                
+                // update users password in the localStorage object
+                updateUserDetails.password = newPassword.value;
+
+                // dont forgot the update the password that is displayed in user settings 
+                elements.querySelector("#password-change").value = newPassword.value;
+
+                // after successfully updating the users password clear the new password inputs
+                newPassword.value = "";
+                reEnteredPsd.value = "";
+
+                // localStorage only accepts strings so need to stringify the object
+                localStorage.setItem(loggedInUser.email, JSON.stringify(updateUserDetails));
+            
+                // lets the user know that the details have been saved successfully
+                document.querySelector("#user-details-success").style.display = "block";
+            }
+
+        }else {
+
+            // grab the data from the user details inputs and write that to the localStorage 
+            // then update the form with the new details       
+            
+            // lets the user know that the details have been saved successfully
+            document.querySelector("#user-details-success").style.display = "block";
+
+            // localStorage only accepts strings so need to stringify the object
+            localStorage.setItem(loggedInUser.email, JSON.stringify(updateUserDetails));
+
+            // for testing purposes...
+            console.log(localStorage.getItem(loggedInUser.email));
+        }
+    }
+    
+}
 
 
 
@@ -219,8 +337,6 @@ const signUpOrLogin = (event) => {
     }
 }
 
-
-
 // SIGNUP FORM AND LOGIN FORM BUTTON EVENT LISTENER CALLBACKS
 const loginFormFunction = function (event) {
     // every submit button click check the form input elements
@@ -237,7 +353,6 @@ const signupFormFunction = function (event) {
         formInputElementChecker(this);    
     }
 }
-
 
 // START PAGE EVENT LISTENERS AND MISC 
 
