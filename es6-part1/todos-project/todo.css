@@ -295,31 +295,58 @@ input:focus{
 .todo{
     width: 300px;
     height: 300px;
+    overflow-y: scroll;
+    scrollbar-width: none;
 }
 
 .new-todo{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display:flex;
+    flex-direction: column;
     margin: 1%;
     margin-top: 4%;
     border: solid black 2px;
 }
 
+#new-todo-item{
+    display: none;
+    align-self: center;
+}
+#todo-edit-title{
+    visibility: hidden;
+    display: flex;
+    padding: 0;
+    margin-top: 15px;
+    font-size: 1.5rem;
+    color: blue;
+    text-align: center;
+    border: none;
+    outline: none;
+}
+
+#todo-edit-title:focus{
+    background: none;
+}
+
 #a-todo-list{
+    display: none;
+    margin-left: 20px;
+    list-style-type: none;
+    font-size: 1.2rem;
+}
+#a-todo-list li{
+    margin-bottom: 10px;
+}
+
+#save-new-todo{
     display: none;
 }
 
 #todo-list-title-input{
-    display: none;
+    display: block;
+    align-self: center;
     max-height: 20px;
     margin-top: 1%;
 }
 
-#todo-list-title{
-    display: none;
-    max-height: 20px;
-    color: blue;
-    align-self: flex-start;
-    margin-top: 4%;
-}
+
+

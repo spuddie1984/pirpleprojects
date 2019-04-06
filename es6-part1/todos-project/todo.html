@@ -147,13 +147,14 @@
             <button class="custom-button-styles delete-account-button" id="delete-user-button">Delete Account</button>
         </div>
         <!-- this new-todo is always visible while on the dashboard page -->
-        <article class="todo new-todo">
-            <button class="alt-button-style" id="new-todo-button"><i class="fas fa-plus fa-4x"></i></button>
-            <h1 id="todo-list-title"></h1>
+        <article id="new-todo-div" class="todo new-todo">
+            <input type="text" id="todo-edit-title">
             <input type="text" id="todo-list-title-input" name="todo-list-title-input" placeholder="Todo Name Please">
+            <input type="text" id="new-todo-item" name="new-todo-item" placeholder="Your Todo Please">
             <ul id="a-todo-list">
-
+                
             </ul>
+            <button class="custom-button-styles" id="save-new-todo">Save</button>
         </article>
 
         <!-- for user to add todo lists -->

@@ -9,7 +9,7 @@ const pageRestart = () => {
     document.querySelector("#signup-page").style.display = "none";
     document.querySelector("#dashboard-page").style.display = "none";
     document.querySelector("#user-exists-error-message").style.display = "none";
-
+    resetNewTodoDiv(document.querySelector("#new-todo-div"));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -51,6 +51,15 @@ const closeUserSettings = () => {
     document.querySelector("#user-details-success").style.display = "none";
 }
 
+function resetNewTodoDiv(div) {
+   const inputs = div.querySelectorAll("input");
+   for(let input of inputs){
+       input.value = "";
+   }
+   div.querySelector("#a-todo-list").removeChild("li");
+   div.querySelector("#save-new-todo").style.display = "none";
+}
+
 // exactly like it sounds log the user out
 const userSignOut = () => {
     
@@ -58,19 +67,41 @@ const userSignOut = () => {
     pageRestart();
 }
 
-// show a new todo on every loggin users dashboard page
-function newTodo (event){
-    this.querySelector("#new-todo-button").style.display = "none";
-    this.querySelector("#todo-list-title-input").style.display = "flex";
-}
-
 // when enter is clicked move on to the next input
 function enterNewTodo(keyboardEvent) { 
-    if(keyboardEvent.keyCode === 13){
-        this.style.display = "none";
-        document.querySelector("#todo-list-title").innerHTML = this.value;
-        document.querySelector("#todo-list-title").style.display = "block";
+    console.log(keyboardEvent);
+    const todoTitleInput = document.querySelector("#todo-list-title-input");
+    const todoTitle = document.querySelector("#todo-edit-title");
+    const todoItem = document.querySelector("#new-todo-item");
+    const newLi = document.createElement("li");
+    const todoList = document.querySelector("#a-todo-list");
+    const saveTodo = document.querySelector("#save-new-todo");
+    if(keyboardEvent.target.id === "todo-list-title-input"){
+        if(keyboardEvent.keyCode === 13){
+            keyboardEvent.stopPropagation();
+            
+            todoTitleInput.style.display = "none";
+            document.querySelector("#todo-edit-title").value = todoTitleInput.value;
+            todoTitle.style.visibility = "visible"
+            if(todoTitle.style.visibility === "visible"){
+                todoItem.style.display = "flex";
+            }
+            else {
+                todoItem.style.display = "none";
+            }
+        }
+    }else if(keyboardEvent.target.id === "new-todo-item"){
+        if(keyboardEvent.keyCode === 13){
+            todoList.style.display = "block";
+            const newChild = todoList.appendChild(newLi);
+            newChild.innerHTML = todoItem.value;
+            keyboardEvent.target.value = "";
+            if(todoList.hasChildNodes()){
+                saveTodo.style.display = "block";
+            }
+        }
     }
+    
     
 }
 
@@ -111,9 +142,8 @@ const loggedIn = (user) => {
     document.querySelector("#user-settings-button").addEventListener("click", userSettings);
     document.querySelector(".user-settings-div").addEventListener("click", editUserDetails);
     document.querySelector("#user-signout").addEventListener("click", userSignOut);
-    document.querySelector(".new-todo").addEventListener("click", newTodo);
     document.querySelector(".user-settings-close-button").addEventListener("click", closeUserSettings);
-    document.querySelector("#todo-list-title-input").addEventListener("keydown", enterNewTodo);
+    document.querySelector(".new-todo").addEventListener("keydown", enterNewTodo);
     document.querySelector("#show-password-button").addEventListener("click", showPassword);
     // could attach this event listener's function to the submit button function for the
     //  main login and signup forms but for modularity reasons i will leave it hear
