@@ -142,11 +142,10 @@ function newTodoDetails(input) {
 const todoListSaverMaker = (list, user) => {
     
     // object to store data for a todo list
-    const listDetails = [{
-            email : user,
+    const listDetails = {
         todoTitle : list.querySelector("#todo-edit-title").value,
                li : [],
-    }];
+    };
     
     // lets grab their list of todo's
     for(let listItem of list.querySelectorAll("li")){
@@ -155,11 +154,11 @@ const todoListSaverMaker = (list, user) => {
 
         // if isn't checked just push to array, else push filled object to array
         if(!listItem.classList.contains("done-list-item")){
-            listDetails[0].li.push(listItem.textContent);
+            listDetails.li.push(listItem.textContent);
         }else {
             listExtra.todo = listItem.textContent;
             listExtra.isChecked = true;
-            listDetails[0].li.push(listExtra);
+            listDetails.li.push(listExtra);
         }
     }
     // oh glorious todo's
@@ -171,9 +170,10 @@ const todoListSaverMaker = (list, user) => {
 
 // remember the users list names cannot conflict
 
-const addListToStorage = (userDetails) => {
+const addListToStorage = (userDetails,userEmail,displayAfterSave) => {
     // add the newly created list to storage and identify it with the users email with -list attached to the end
-    localStorage.setItem(`${userDetails.email}-list`, JSON.stringify(userDetails));    
+    localStorage.setItem(`${userEmail}-list`, JSON.stringify(userDetails));   
+    displayAfterSave(userEmail); 
 }
 
 const displaySavedLists = (userDetails) => {
@@ -225,12 +225,9 @@ const loggedIn = (user) => {
     const saveNewTodo = () => {
         document.querySelector("#list-saved-message").style.display = "block";
         // use this to save to users localStorage and create a new list in their dashboard
-        const saveUserDetalis = todoListSaverMaker(document.querySelector("#new-todo-div"), currentlyLoggedInUser);
+        const saveUserDetalis = todoListSaverMaker(document.querySelector("#new-todo-div"));
         
-        addListToStorage(saveUserDetalis);
-        displaySavedLists(saveUserDetalis);
-        console.log(JSON.parse(localStorage.getItem(`${currentlyLoggedInUser}-list`)));
-        
+        addListToStorage(saveUserDetalis, currentlyLoggedInUser,displaySavedLists);
     }
 
     // event listeners for the dashboard
