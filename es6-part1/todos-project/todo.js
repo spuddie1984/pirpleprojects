@@ -1,4 +1,5 @@
-////////////////////////////////// GENERAL //////////////////////////////////
+////////////////////////////////// GENERAL /////////////////////////////////////
+
 // On Page refresh or Reload reset the login section, 
 // signup section and dashboard section to display:none
 // function called in the startPageLoad function 
@@ -13,7 +14,6 @@ const pageRestart = () => {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
 
 ////////////////////////////////// DASHBOARD //////////////////////////////////
 
@@ -51,12 +51,21 @@ const closeUserSettings = () => {
     document.querySelector("#user-details-success").style.display = "none";
 }
 
+// reset all values in the new todo div, delete list items
 function resetNewTodoDiv(div) {
    const inputs = div.querySelectorAll("input");
+   const todoList = div.querySelector("#a-todo-list");
+   div.querySelector("#list-saved-message").style.display = "none";
+   // reset all input values
    for(let input of inputs){
        input.value = "";
    }
-   div.querySelector("#a-todo-list").removeChild("li");
+
+   // delete all list items
+   while(todoList.hasChildNodes()){
+       todoList.removeChild(todoList.lastChild);
+   }
+   
    div.querySelector("#save-new-todo").style.display = "none";
 }
 
@@ -67,20 +76,43 @@ const userSignOut = () => {
     pageRestart();
 }
 
-// when enter is clicked move on to the next input
-function enterNewTodo(keyboardEvent) { 
-    console.log(keyboardEvent);
+// mark or delete a todo item
+function liCheckUncheck(event) {
+    document.querySelector("#list-saved-message").style.display = "none";
+    if(event.target.classList.contains("trashbin")){
+        event.target.parentNode.parentNode.removeChild(event.target.parentNode);
+    
+    // if all the list items are deleted, hide the save button
+    }if(!this.hasChildNodes()){
+        document.querySelector("#save-new-todo").style.display = "none";
+    }else{
+        document.querySelector("#save-new-todo").style.display = "block";
+    }
+    // don't forget to mark / unmark list items  ;)
+    if(event.target.tagName === "LI"){
+        event.target.classList.toggle("done-list-item");
+    }
+}
+
+// for modification of the new todo list and its items
+function newTodoDetails(input) {
+    // make all dom selectors shorter(it's easier for repeated use) by assigning them to variables
     const todoTitleInput = document.querySelector("#todo-list-title-input");
     const todoTitle = document.querySelector("#todo-edit-title");
     const todoItem = document.querySelector("#new-todo-item");
     const newLi = document.createElement("li");
     const todoList = document.querySelector("#a-todo-list");
     const saveTodo = document.querySelector("#save-new-todo");
-    if(keyboardEvent.target.id === "todo-list-title-input"){
-        if(keyboardEvent.keyCode === 13){
-            keyboardEvent.stopPropagation();
-            
+ 
+    // lets start the the todo list title
+    if(input.target.id === "todo-list-title-input"){
+        // KeyCode 13 is enter on the keyboard
+        // enter a title for your todo
+        if(input.keyCode === 13 && input.target.value.length > 0){
+            input.stopPropagation();
+            // lets hide that todo title input box
             todoTitleInput.style.display = "none";
+            // add entered value and display title 
             document.querySelector("#todo-edit-title").value = todoTitleInput.value;
             todoTitle.style.visibility = "visible"
             if(todoTitle.style.visibility === "visible"){
@@ -90,26 +122,69 @@ function enterNewTodo(keyboardEvent) {
                 todoItem.style.display = "none";
             }
         }
-    }else if(keyboardEvent.target.id === "new-todo-item"){
-        if(keyboardEvent.keyCode === 13){
+    }else if(input.target.id === "new-todo-item"){
+        // KeyCode 13 is enter on the keyboard
+        if(input.keyCode === 13){
             todoList.style.display = "block";
-            const newChild = todoList.appendChild(newLi);
-            newChild.innerHTML = todoItem.value;
-            keyboardEvent.target.value = "";
+            // store input value in a newly created li 
+            const newChild = todoList.appendChild(newLi);            
+            newChild.innerHTML = "<span class='far fa-trash-alt trashbin'></span>" + todoItem.value;
+            // clear the input every enterkey press
+            input.target.value = "";
+            // wait until someone enters a list item before showing the save button
             if(todoList.hasChildNodes()){
                 saveTodo.style.display = "block";
             }
         }
     }
+ }
+
+const todoListSaverMaker = (list, user) => {
     
+    // object to store data for a todo list
+    const listDetails = [{
+            email : user,
+        todoTitle : list.querySelector("#todo-edit-title").value,
+               li : [],
+    }];
     
+    // lets grab their list of todo's
+    for(let listItem of list.querySelectorAll("li")){
+        // use this to store checked todo status
+        const listExtra = {};
+
+        // if isn't checked just push to array, else push filled object to array
+        if(!listItem.classList.contains("done-list-item")){
+            listDetails[0].li.push(listItem.textContent);
+        }else {
+            listExtra.todo = listItem.textContent;
+            listExtra.isChecked = true;
+            listDetails[0].li.push(listExtra);
+        }
+    }
+    // oh glorious todo's
+    return listDetails;
+}
+// How should lists be stored
+// - as an array of objects
+// - as objects but called by title
+
+// remember the users list names cannot conflict
+
+const addListToStorage = (userDetails) => {
+    // add the newly created list to storage and identify it with the users email with -list attached to the end
+    localStorage.setItem(`${userDetails.email}-list`, JSON.stringify(userDetails));    
+}
+
+const displaySavedLists = (userDetails) => {
+
+    console.log(JSON.parse(localStorage.getItem(`${userDetails}-list`)));
 }
 
 // for list modification purposes
 const usersLists = (lists) => {
-
+   
 }
-
 
 // show the dashboard with a new todo list
 const loggedIn = (user) => {
@@ -119,10 +194,13 @@ const loggedIn = (user) => {
     // lets grab the currently logged in users details
     // for further use in the settings box(div), and beyond....
     const currentlyLoggedInUserDetails = userSettingsFunction(user);
-
+    
     // grab the email of the current user this is used to identify the person logged in
     const currentlyLoggedInUser = user.email;
-    console.log(currentlyLoggedInUser);
+    // console.log(currentlyLoggedInUser);
+
+    // as it says, display the current users saved lists
+    displaySavedLists(`${currentlyLoggedInUser}-list`);
 
     // user details callback
     function editUserDetails(event) {
@@ -134,29 +212,41 @@ const loggedIn = (user) => {
             formInputElementChecker(this,currentlyLoggedInUserDetails);
         }else if(event.target.id === "delete-user-button"){
             localStorage.removeItem(currentlyLoggedInUser);
-            pageRestart();
-            
+            pageRestart(); 
         }
     }
-    // possibly move all these listeners to the main page load func
+
+    // when enter is clicked move on to the next input
+    const enterNewTodo = (keyboardEvent) => { 
+        document.querySelector("#list-saved-message").style.display = "none";
+        newTodoDetails(keyboardEvent);    
+    }
+
+    const saveNewTodo = () => {
+        document.querySelector("#list-saved-message").style.display = "block";
+        // use this to save to users localStorage and create a new list in their dashboard
+        const saveUserDetalis = todoListSaverMaker(document.querySelector("#new-todo-div"), currentlyLoggedInUser);
+        
+        addListToStorage(saveUserDetalis);
+        displaySavedLists(saveUserDetalis);
+        console.log(JSON.parse(localStorage.getItem(`${currentlyLoggedInUser}-list`)));
+        
+    }
+
+    // event listeners for the dashboard
     document.querySelector("#user-settings-button").addEventListener("click", userSettings);
     document.querySelector(".user-settings-div").addEventListener("click", editUserDetails);
     document.querySelector("#user-signout").addEventListener("click", userSignOut);
     document.querySelector(".user-settings-close-button").addEventListener("click", closeUserSettings);
     document.querySelector(".new-todo").addEventListener("keydown", enterNewTodo);
     document.querySelector("#show-password-button").addEventListener("click", showPassword);
-    // could attach this event listener's function to the submit button function for the
-    //  main login and signup forms but for modularity reasons i will leave it hear
-    // (try to keep all the related code together, for easier reading :) ) 
-    
+    document.querySelector("#a-todo-list").addEventListener("click", liCheckUncheck);
+    document.querySelector("#save-new-todo").addEventListener("click", saveNewTodo);    
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
 ////////////////////////////////// VALIDATION //////////////////////////////////
-
 
 // check each input in a chosen form, check each input with the inputValidator function
 const formInputElementChecker = (input,loggedInUser) => {
@@ -231,16 +321,16 @@ const localStorageCheckerSetter = (elements, loggedInUser) => {
     
     // new user data object
     const newUser = {
-        "firstName" : "",
-        "lastName"  : "",
-        "email"     : "",
-        "password"  : "",
+       firstName : "",
+        lastName : "",
+           email : "",
+        password : "",
     };
 
     // existing user data object
     const existingUser = {
-        "email"    : "",
-        "password" : "",
+           email : "",
+        password : "",
     };
 
     if(elements.id !== "login-form" && elements.id !== "user-settings"){
@@ -344,8 +434,6 @@ const localStorageCheckerSetter = (elements, loggedInUser) => {
     }
     
 }
-
-
 
 ////////////////////////////////// START PAGE //////////////////////////////////
 

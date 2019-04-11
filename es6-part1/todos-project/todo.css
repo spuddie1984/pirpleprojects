@@ -136,7 +136,7 @@ input:focus{
     text-align: center;
 }
 
-#user-details-success{
+#user-details-success, #list-saved-message{
     display: none;
     color: green;
     font-size: 1rem;
@@ -329,12 +329,43 @@ input:focus{
 
 #a-todo-list{
     display: none;
-    margin-left: 20px;
+    align-self: left;
     list-style-type: none;
     font-size: 1.2rem;
+    padding-left: 0;
 }
 #a-todo-list li{
-    margin-bottom: 10px;
+    padding-left: 0px;
+    margin-left: 35px;
+    margin-right: 30px;
+    word-wrap: break-word;
+    background-color: #f7fcff;
+}
+
+#a-todo-list li:nth-child(2n){
+    background-color: #e5e5e5;
+}
+
+#a-todo-list span{
+    font-size: 0.8rem;
+    width: 0px;
+    opacity: 0;
+    transition: 0.4s;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right: 15px;
+    color: white;
+    padding-left: 10px;
+    background-color: red;
+}
+
+#a-todo-list li:hover span{
+    width: 10px;
+    opacity: 1;
+}
+.done-list-item{
+    text-decoration: line-through;
+    opacity: 0.5;
 }
 
 #save-new-todo{
