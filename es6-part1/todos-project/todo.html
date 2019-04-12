@@ -146,22 +146,23 @@
             
             <button class="custom-button-styles delete-account-button" id="delete-user-button">Delete Account</button>
         </div>
-        <!-- this new-todo is always visible while on the dashboard page -->
-        <article id="new-todo-div" class="todo new-todo">
-            <input type="text" id="todo-edit-title">
-            <input type="text" id="todo-list-title-input" name="todo-list-title-input" placeholder="Todo Name Please">
-            <input type="text" id="new-todo-item" name="new-todo-item" placeholder="Your Todo Please">
-            <ul id="a-todo-list">
-                
-            </ul>
-            <div id="list-saved-message">Your List was Saved !!!</div>
-            <button class="custom-button-styles" id="save-new-todo">Save</button>
-        </article>
+        <section id="show-saved-todos" class="saved-todo">
+            <!-- this new-todo is always visible while on the dashboard page -->
+            <article id="new-todo-div" class="todo new-todo">
+                <input type="text" id="todo-edit-title">
+                <input type="text" id="todo-list-title-input" name="todo-list-title-input" placeholder="Todo Name Please">
+                <input type="text" id="new-todo-item" name="new-todo-item" placeholder="Your Todo Please">
+                <ul id="a-todo-list">
+                    
+                </ul>
+                <div id="list-saved-message">Your List was Saved !!!</div>
+                <div id="todo-title-error-message">Sorry that title already exists</div>
+                <button class="custom-button-styles" id="save-new-todo">Save</button>
+            </article>
 
-        <!-- for user to add todo lists -->
-        <article class="todo-lists">
-
-        </article>
+            <!-- saved todo's will show in the browser here(dynamically loaded) -->
+            
+        </section>
     </div>
 
 </body>

@@ -164,21 +164,62 @@ const todoListSaverMaker = (list, user) => {
     // oh glorious todo's
     return listDetails;
 }
-// How should lists be stored
-// - as an array of objects
-// - as objects but called by title
 
-// remember the users list names cannot conflict
-
+// check for todoTitle naming collisions then,
+// add the newly created list to storage and identify it with the users email with -list attached to the end
 const addListToStorage = (userDetails,userEmail,displayAfterSave) => {
-    // add the newly created list to storage and identify it with the users email with -list attached to the end
-    localStorage.setItem(`${userEmail}-list`, JSON.stringify(userDetails));   
-    displayAfterSave(userEmail); 
+    
+    // get users lists
+    let checkUserLists = JSON.parse(localStorage.getItem(`${userEmail}-list`));
+
+    // check for existing user lists if none lets add our first todo list
+    // a variable to hold objects to be pushed to JSON array
+    let todoHolder = [];
+
+    // callback for the every array method
+    // check for matching titles, if they match return false and stop searching the array
+    const titleChecker = (title) => {
+        return title.todoTitle !== userDetails.todoTitle;   
+    }
+    ////// POSSIBLE REFACTOR TRY TO FOLLOW DRY PRINCIPLE WITH THE displayAfterSave FUNC CALL ///////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // after a few checks lets send our todo list to storage ;)
+    if(checkUserLists === null){
+        todoHolder.push(userDetails);
+        localStorage.setItem(`${userEmail}-list`, JSON.stringify(todoHolder));
+        // as it says display the list on the dashboard
+        displayAfterSave(userEmail);
+    }else{
+        if(!checkUserLists.every(titleChecker)){
+            document.querySelector("#todo-title-error-message").style.display = "block";
+        }else{
+            checkUserLists.push(userDetails); 
+            document.querySelector("#todo-title-error-message").style.display = "none";
+            localStorage.setItem(`${userEmail}-list`, JSON.stringify(checkUserLists));
+            displayAfterSave(userEmail);
+        }
+    }
+}
+
+const todoBuilder = (todo) => {
+    const childTodo = document.createElement("article");
+    const todoContainer = document.querySelector("#show-saved-todos").appendChild(childTodo);
+    todoContainer.classList.add("todo");
+    
 }
 
 const displaySavedLists = (userDetails) => {
+    todoBuilder();
+    // for testing purposes
+    console.log(localStorage.getItem(`${userDetails}-list`));
+    
+    // need to grab the users saved lists first
+    const userSavedLists = localStorage.getItem(`${userDetails}-list`);
 
-    console.log(JSON.parse(localStorage.getItem(`${userDetails}-list`)));
+    // lets build their lists one at a time
+    for(let todo of userSavedLists){
+        
+    }
 }
 
 // for list modification purposes
@@ -200,7 +241,7 @@ const loggedIn = (user) => {
     // console.log(currentlyLoggedInUser);
 
     // as it says, display the current users saved lists
-    displaySavedLists(`${currentlyLoggedInUser}-list`);
+    displaySavedLists(currentlyLoggedInUser);
 
     // user details callback
     function editUserDetails(event) {
@@ -235,7 +276,7 @@ const loggedIn = (user) => {
     document.querySelector(".user-settings-div").addEventListener("click", editUserDetails);
     document.querySelector("#user-signout").addEventListener("click", userSignOut);
     document.querySelector(".user-settings-close-button").addEventListener("click", closeUserSettings);
-    document.querySelector(".new-todo").addEventListener("keydown", enterNewTodo);
+    document.querySelector("#new-todo-div").addEventListener("keydown", enterNewTodo);
     document.querySelector("#show-password-button").addEventListener("click", showPassword);
     document.querySelector("#a-todo-list").addEventListener("click", liCheckUncheck);
     document.querySelector("#save-new-todo").addEventListener("click", saveNewTodo);    
