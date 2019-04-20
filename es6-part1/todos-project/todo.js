@@ -1,3 +1,10 @@
+////////////////////////////////// NOTES ///////////////////////////////////////
+// - Consider refactoring the saved todo list / new todo list logic, it's possible to 
+//   reduce the double ups by referring to li tags instead of using an id for the new todo list
+//   that way li's can be referred to programmatically
+// - refine css a bit messy
+// - if refactoring the whole project i will follow oop style instead would be much cleaner
+// - ui redesign maybe ???
 ////////////////////////////////// GENERAL /////////////////////////////////////
 
 // On Page refresh or Reload reset the login section, 
@@ -17,8 +24,10 @@ const pageRestart = () => {
 
 ////////////////////////////////// DASHBOARD //////////////////////////////////
 
+/////////////////////////// USER SETTINGS SECTION /////////////////////////////
+
 // on user settings button click show user settings box(div)
-const userSettings = (event) => {
+const userSettings = () => {
     const userSettings = document.querySelector(".user-settings-div");    
     userSettings.classList.add("user-settings-display-toggle"); 
 }
@@ -29,14 +38,13 @@ const userSettingsFunction = (details) => {
     const getUserInfo = JSON.parse(localStorage.getItem(details.email));
     document.querySelector("#first-name-change").value = getUserInfo.firstName;
     document.querySelector("#last-name-change").value = getUserInfo.lastName;
-    document.querySelector("#password-change").value = getUserInfo.password;
     
     // return for later use
     return getUserInfo;
 }
  
 // show users password when a user clicks and holds the mouse button
-const showPassword = (event) => {
+const showPassword = () => {
     const pswdInput = document.querySelector("#password-change");
     if(pswdInput.type === "password"){
         pswdInput.type = "text";
@@ -51,30 +59,35 @@ const closeUserSettings = () => {
     document.querySelector("#user-details-success").style.display = "none";
 }
 
-// reset all values in the new todo div, delete list items
-function resetNewTodoDiv(div) {
-   const inputs = div.querySelectorAll("input");
-   const todoList = div.querySelector("#a-todo-list");
-   div.querySelector("#list-saved-message").style.display = "none";
-   // reset all input values
-   for(let input of inputs){
-       input.value = "";
-   }
-
-   // delete all list items
-   while(todoList.hasChildNodes()){
-       todoList.removeChild(todoList.lastChild);
-   }
-   
-   div.querySelector("#save-new-todo").style.display = "none";
-}
-
 // exactly like it sounds log the user out
 const userSignOut = () => {
-    
+
+    document.querySelector("#new-todo-div").classList.remove("new-todo-toggle-display");
+    document.querySelector("#new-todo-button").classList.remove("new-todo-button-toggle-display");
     // basically reload the page so that the start page is shown
-    pageRestart();
+    location.reload();
+    
 }
+
+////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////// TODO STUFF /////////////////////////////////////
+
+// reset all values in the new todo div, delete list items
+function resetNewTodoDiv(div) {
+    const inputs = div.querySelectorAll("input");
+    const todoList = div.querySelector("#a-todo-list");
+    div.querySelector("#list-saved-message").style.display = "none";
+    // reset all input values
+    for(let input of inputs){
+        input.value = "";
+    }
+    // delete all list items
+    while(todoList.hasChildNodes()){
+        todoList.removeChild(todoList.lastChild);
+    }
+    div.querySelector("#save-new-todo").style.display = "none";
+ } 
 
 // mark or delete a todo item
 function liCheckUncheck(event) {
@@ -139,11 +152,11 @@ function newTodoDetails(input) {
     }
  }
 
-const todoListSaverMaker = (list, user) => {
+const todoListSaverMaker = (list) => {
     
     // object to store data for a todo list
     const listDetails = {
-        todoTitle : list.querySelector("#todo-edit-title").value,
+        todoTitle : list.querySelector(".todo-edit-title").value,
                li : [],
     };
     
@@ -167,7 +180,7 @@ const todoListSaverMaker = (list, user) => {
 
 // check for todoTitle naming collisions then,
 // add the newly created list to storage and identify it with the users email with -list attached to the end
-const addListToStorage = (userDetails,userEmail,displayAfterSave) => {
+const addListToStorage = (userDetails,userEmail,displayNewlyCreatedTodo) => {
     
     // get users lists
     let checkUserLists = JSON.parse(localStorage.getItem(`${userEmail}-list`));
@@ -181,54 +194,115 @@ const addListToStorage = (userDetails,userEmail,displayAfterSave) => {
     const titleChecker = (title) => {
         return title.todoTitle !== userDetails.todoTitle;   
     }
-    ////// POSSIBLE REFACTOR TRY TO FOLLOW DRY PRINCIPLE WITH THE displayAfterSave FUNC CALL ///////
+    ////// POSSIBLE REFACTOR TRY TO FOLLOW DRY PRINCIPLE WITH THE displayNewlyCreatedTodo FUNC CALL ///////
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // after a few checks lets send our todo list to storage ;)
+    // localStorage returns null if the key doesnt exist
+    // if there are no lists stored for that user lets add the first one ever
+    // we will store an array of objects for each users Email
     if(checkUserLists === null){
         todoHolder.push(userDetails);
         localStorage.setItem(`${userEmail}-list`, JSON.stringify(todoHolder));
         // as it says display the list on the dashboard
-        displayAfterSave(userEmail);
+        // a call to the displaySavedLists function
+        displayNewlyCreatedTodo(userEmail);
     }else{
+        // check for todo title collisions
+        // Oh no that todo title is already in use
         if(!checkUserLists.every(titleChecker)){
             document.querySelector("#todo-title-error-message").style.display = "block";
+        
+        // no worries no collisions lets proceed and write the todo details to the array of lists
         }else{
             checkUserLists.push(userDetails); 
             document.querySelector("#todo-title-error-message").style.display = "none";
+            // a call to the displaySavedLists function
             localStorage.setItem(`${userEmail}-list`, JSON.stringify(checkUserLists));
-            displayAfterSave(userEmail);
+            displayNewlyCreatedTodo(userEmail, true);
         }
     }
 }
 
 const todoBuilder = (todo) => {
     const childTodo = document.createElement("article");
+    const childInput = document.createElement("input");
     const todoContainer = document.querySelector("#show-saved-todos").appendChild(childTodo);
+    const ulList = document.createElement("ul");
+    const deleteButton = document.createElement("button");
+    const saveChangesButton = document.createElement("button");
+    const errorMessage = document.createElement("div");
+    const titleMessage = document.createElement("span");
+
+    // children
+    todoContainer.appendChild(childInput); 
+    todoContainer.appendChild(titleMessage);
+    todoContainer.appendChild(ulList);
+    todoContainer.appendChild(errorMessage);
+    todoContainer.appendChild(saveChangesButton);
+    todoContainer.appendChild(deleteButton);
+    
+    // styling and attributes
+    childTodo.setAttribute("data-todo", todo.todoTitle);
     todoContainer.classList.add("todo");
-    
-}
+    childInput.classList.add("todo-edit-title");
+    titleMessage.classList.add("title-message");
+    ulList.classList.add("the-todo-list");
+    errorMessage.classList.add("saved-todo-title-error-message");
+    saveChangesButton.classList.add("custom-button-styles", "saved-todos-changes-button");
+    deleteButton.classList.add("custom-button-styles", "saved-todos-delete-button");
 
-const displaySavedLists = (userDetails) => {
-    todoBuilder();
-    // for testing purposes
-    console.log(localStorage.getItem(`${userDetails}-list`));
-    
-    // need to grab the users saved lists first
-    const userSavedLists = localStorage.getItem(`${userDetails}-list`);
+    // content
+    childInput.value = todo.todoTitle;
+    titleMessage.textContent = "Click the title to change";    
+    errorMessage.textContent = "Sorry that todo tilte already exists";
+    saveChangesButton.textContent = "Save Changes";
+    deleteButton.textContent = "Delete";
 
-    // lets build their lists one at a time
-    for(let todo of userSavedLists){
-        
+    // add li elements to the ul list including the trashbin span and any checked list items
+    for(let listItem of todo.li){
+        const liTag = document.createElement("li");
+        const addLi = ulList.appendChild(liTag);
+        if(listItem.isChecked){
+            addLi.innerHTML = `<span class="far fa-trash-alt trashbin"></span>${listItem.todo}`;
+            addLi.classList.add("done-list-item");
+        }else{
+            addLi.innerHTML = `<span class="far fa-trash-alt trashbin"></span>${listItem}`;
+        }  
     }
 }
 
-// for list modification purposes
-const usersLists = (lists) => {
-   
+const displaySavedLists = (userDetails,addNewTodoToDisplayList = false) => {
+    // if no todo lists in storage we have nothing to display 
+    if(localStorage.getItem(`${userDetails}-list`) !== null){
+    
+        // need to grab the users saved lists first
+        const userSavedLists = JSON.parse(localStorage.getItem(`${userDetails}-list`));
+        
+        // if we add a new todo to storage add that to the displayed todo's
+        // no need to refresh all the displayed todos just add the newly created one
+        // on login display all todo's
+        if(!addNewTodoToDisplayList){
+            for(let todo of userSavedLists){
+                todoBuilder(todo);
+            }
+        }else{
+            todoBuilder(userSavedLists[userSavedLists.length-1]);
+        }
+    }
 }
 
+// on button click show the new todo box
+const newTodoButton = () => {
+    document.querySelector("#new-todo-div").classList.remove("new-todo-toggle-display");
+    document.querySelector("#new-todo-button").classList.add("new-todo-button-toggle-display");
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+
+////////////// MAIN FUNCTION FOR USER ACTIVITIES WHILE LOGGED IN //////////////////
+
 // show the dashboard with a new todo list
-const loggedIn = (user) => {
+const loggedIn = (user, userSettingsPassword) => {
     // oh glorious dashboard
     document.querySelector("#dashboard-page").style.display = "block";
     
@@ -238,7 +312,12 @@ const loggedIn = (user) => {
     
     // grab the email of the current user this is used to identify the person logged in
     const currentlyLoggedInUser = user.email;
-    // console.log(currentlyLoggedInUser);
+
+    // use the password that was entered in the signup/login form and display it
+    // in the user settings show password field
+    // P.S this is the password before it is hashed
+
+    document.querySelector("#password-change").value = userSettingsPassword;
 
     // as it says, display the current users saved lists
     displaySavedLists(currentlyLoggedInUser);
@@ -252,6 +331,7 @@ const loggedIn = (user) => {
             // to validation function so we can update that users details after validation
             formInputElementChecker(this,currentlyLoggedInUserDetails);
         }else if(event.target.id === "delete-user-button"){
+            localStorage.removeItem(`${currentlyLoggedInUser}-list`);
             localStorage.removeItem(currentlyLoggedInUser);
             pageRestart(); 
         }
@@ -266,11 +346,71 @@ const loggedIn = (user) => {
     const saveNewTodo = () => {
         document.querySelector("#list-saved-message").style.display = "block";
         // use this to save to users localStorage and create a new list in their dashboard
-        const saveUserDetalis = todoListSaverMaker(document.querySelector("#new-todo-div"));
-        
-        addListToStorage(saveUserDetalis, currentlyLoggedInUser,displaySavedLists);
+        const saveUserDetails = todoListSaverMaker(document.querySelector("#new-todo-div"));
+        addListToStorage(saveUserDetails, currentlyLoggedInUser,displaySavedLists);
+        document.querySelector("#new-todo-div").classList.add("new-todo-toggle-display");
+        resetNewTodoDiv(document.querySelector("#new-todo-div"));
+        document.querySelector("#new-todo-button").classList.remove("new-todo-button-toggle-display");
     }
 
+    // modify or delete displayed todos - A.K.A The tricky section
+    const delModTodos = function(event){
+        // for later reference
+        const thisDisplayedTodo = this.querySelector(".todo-edit-title");
+        const thisSavedTodo = JSON.parse(localStorage.getItem(`${currentlyLoggedInUser}-list`));
+
+        // delete todo from localstorage and from the node tree
+        if(event.target.classList.contains("saved-todos-delete-button")){
+            this.removeChild(event.target.parentNode);
+            thisSavedTodo.splice(thisSavedTodo.findIndex(function(item){return item.todoTitle === thisDisplayedTodo.value}),1);
+            localStorage.setItem(`${currentlyLoggedInUser}-list`,JSON.stringify(thisSavedTodo)); 
+            // if there is only 1 todo in localStorage remove the list object from localStorage all together
+            if(thisSavedTodo.length < 1){
+                localStorage.removeItem(`${currentlyLoggedInUser}-list`);
+            }
+        // save changes to a todo(only if no title naming collisions)
+        }else if(event.target.classList.contains("saved-todos-changes-button")){
+            // the details we will use to update localStorage
+            const changeTodo = todoListSaverMaker(event.target.parentNode);
+            // use a data attribute as a reference to the targeted todo list
+            const currentTodoTitle = event.target.parentNode.getAttribute("data-todo");
+  
+            // array every method callback
+            const existingTodoTitleChecker = (todoItem) => {
+                // so that we can make changes to the todo list and not the title
+                if(todoItem.todoTitle !== currentTodoTitle){
+                    // check for todo title collisions in localStorage
+                    return todoItem.todoTitle !== changeTodo.todoTitle;
+                }else{
+                    // if we havent changed the todo title 
+                    // it doesnt mean we dont want to change the todo list, so return true
+                    return true;
+                }
+            }
+            // passed all the tests.... lets save and show our changes
+            if(thisSavedTodo.every(existingTodoTitleChecker)){
+                event.target.parentNode.querySelector(".saved-todo-title-error-message").style.display = "none";
+                const siblingsIndex = thisSavedTodo.findIndex(function(item){return item.todoTitle === currentTodoTitle});
+                thisSavedTodo.splice(siblingsIndex,1,changeTodo);
+
+                // for Reference, testing.....
+                console.log("changeTodo:",changeTodo,"thisSavedTodo:",thisSavedTodo);       
+                
+                event.target.parentNode.setAttribute("data-todo",changeTodo.todoTitle);         
+                localStorage.setItem(`${currentlyLoggedInUser}-list`, JSON.stringify(thisSavedTodo));
+            // oh oh didnt pass the tests
+            }else{
+                event.target.parentNode.querySelector(".saved-todo-title-error-message").style.display = "block";
+            }
+        // delete a todo list item
+        }else if(event.target.classList.contains("trashbin")){
+            event.target.parentNode.remove(event.target.parentNode);
+        // mark a todo item as checked
+        }else if(event.target.tagName === "LI"){
+            event.target.classList.toggle("done-list-item");
+        }
+    }
+    
     // event listeners for the dashboard
     document.querySelector("#user-settings-button").addEventListener("click", userSettings);
     document.querySelector(".user-settings-div").addEventListener("click", editUserDetails);
@@ -279,12 +419,14 @@ const loggedIn = (user) => {
     document.querySelector("#new-todo-div").addEventListener("keydown", enterNewTodo);
     document.querySelector("#show-password-button").addEventListener("click", showPassword);
     document.querySelector("#a-todo-list").addEventListener("click", liCheckUncheck);
-    document.querySelector("#save-new-todo").addEventListener("click", saveNewTodo);    
+    document.querySelector("#save-new-todo").addEventListener("click", saveNewTodo);   
+    document.querySelector("#show-saved-todos").addEventListener("click", delModTodos);
+    document.querySelector("#new-todo-button").addEventListener("click", newTodoButton);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////// VALIDATION //////////////////////////////////
+////////////////////////////////// VALIDATION //////////////////////////////////////
 
 // check each input in a chosen form, check each input with the inputValidator function
 const formInputElementChecker = (input,loggedInUser) => {
@@ -357,6 +499,9 @@ const inputValidator = (input) => {
 // for retrieving user data and for setting user data into localStorage 
 const localStorageCheckerSetter = (elements, loggedInUser) => {
     
+    // variable to store the hashed password
+    let hashedPassword;
+    
     // new user data object
     const newUser = {
        firstName : "",
@@ -374,20 +519,22 @@ const localStorageCheckerSetter = (elements, loggedInUser) => {
     if(elements.id !== "login-form" && elements.id !== "user-settings"){
         // make sure that user doesnt already exist
         if(localStorage.getItem(elements.querySelector("#user-signup-email").value) === null){
+            // hash the user's inputted password and save the hash not the password
+            hashedPassword = CryptoJS.MD5(elements.querySelector("#user-signup-password").value).toString();
             
             // put new users details into a object to stringify
             newUser.firstName = elements.querySelector("#first-name").value;
             newUser.lastName = elements.querySelector("#last-name").value;
             newUser.email = elements.querySelector("#user-signup-email").value;
-            newUser.password = elements.querySelector("#user-signup-password").value;
+            newUser.password = hashedPassword;
             
             // add the new user to localStorage and hide the signup form
             localStorage.setItem(newUser.email, JSON.stringify(newUser));
             document.querySelector("#signup-page").style.display = "none";
             document.querySelector("#signup-form").reset();
             // Lets go to the dashboard
-            loggedIn(newUser);
-            
+            loggedIn(newUser, elements.querySelector("#user-signup-password").value);
+
         }else{
             // that user already exists
             document.querySelector("#user-exists-error-message").style.display = "block";
@@ -395,7 +542,7 @@ const localStorageCheckerSetter = (elements, loggedInUser) => {
     }else if(elements.id === "login-form"){
         // lets log in
         existingUser.email = elements.querySelector("#user-email").value;
-        existingUser.password = elements.querySelector("#user-password").value;
+        
         // check to see if that user exists in localstorage
         if(localStorage.getItem(existingUser.email) === null){
             // if user doesnt exist show error message and reset form inputs
@@ -405,12 +552,18 @@ const localStorageCheckerSetter = (elements, loggedInUser) => {
         }else{
             elements.querySelector("#user-doesnt-exist-error-message").style.display = "none";
             document.querySelector("#login-page").style.display = "none";
-            document.querySelector("#login-form").reset();
-
+            const existingUsersPassword = JSON.parse(localStorage.getItem(existingUser.email)).password;
+            
             // need to check password here
             // consider having a password hasher here
-            // lets go to the dashboard
-            loggedIn(existingUser);             
+            if(existingUsersPassword === CryptoJS.MD5(elements.querySelector("#user-password").value).toString()){
+                // lets go to the dashboard
+                loggedIn(existingUser, elements.querySelector("#user-password").value);
+                document.querySelector("#login-form").reset();  
+            }else{
+                elements.querySelector("#wrong-password-error-message").style.display = "block";
+                document.querySelector("#login-page").style.display = "block";
+            }          
         }
 
     }else if(elements.id === "user-settings"){
@@ -419,7 +572,7 @@ const localStorageCheckerSetter = (elements, loggedInUser) => {
         const updateUserDetails = {};
         updateUserDetails.firstName = elements.querySelector("#first-name-change").value;
         updateUserDetails.lastName = elements.querySelector("#last-name-change").value;
-        
+        updateUserDetails.password = CryptoJS.MD5(elements.querySelector("#password-change").value).toString();
         
         // make the if statements shorter
         const newPassword = elements.querySelector("#new-password");
@@ -435,11 +588,12 @@ const localStorageCheckerSetter = (elements, loggedInUser) => {
             // all is good so send the new password and details to localStorage 
             }else if(newPassword.value === reEnteredPsd.value){
                 
-
                 elements.querySelector("#new-password-error-message").style.display = "none";
                 
+                // hash the new password
+                hashedPassword = CryptoJS.MD5(newPassword.value).toString();
                 // update users password in the localStorage object
-                updateUserDetails.password = newPassword.value;
+                updateUserDetails.password = hashedPassword;
 
                 // dont forgot the update the password that is displayed in user settings 
                 elements.querySelector("#password-change").value = newPassword.value;
@@ -473,7 +627,7 @@ const localStorageCheckerSetter = (elements, loggedInUser) => {
     
 }
 
-////////////////////////////////// START PAGE //////////////////////////////////
+////////////////////////////////// START PAGE //////////////////////////////////////
 
 // START PAGE FORM CALLBACK
 // function for start page button listener(inside the startPageLoad function)
@@ -536,4 +690,4 @@ const startPageLoad = () => {
 // page load or page refresh event listener
 document.addEventListener("DOMContentLoaded", startPageLoad);
 
-//////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////

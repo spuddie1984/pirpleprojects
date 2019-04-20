@@ -8,10 +8,11 @@
     <!-- font awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="todo.css" />
+    <!-- MD5 password hashing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
     <script src="todo.js"></script>
 </head>
 <body>
-
     <!-- START PAGE SECTION -->
     <div id="start-page">
     
@@ -42,6 +43,7 @@
                 <input type="password" placeholder="Password" name="login-password" id="user-password">
 
             <div id="user-doesnt-exist-error-message">Sorry that user doesn't exist in our database, please signup !</div>
+            <div id="wrong-password-error-message">Wrong Password !!!</div>
 
             <div id="login-form-error-message">Please fill in all the fields</div>
 
@@ -104,6 +106,7 @@
     <div id="dashboard-page">
     
         <nav class="nav-menu">
+            <button class="alt-button-style nav-menu-buttons" id="new-todo-button"><i class="fas fa-plus fa-2x"></i></button>
             <button class="alt-button-style nav-menu-buttons" id="user-settings-button"><i class="fas fa-sliders-h fa-lg"></i></button>
             <button class="alt-button-style nav-menu-buttons" id="user-signout"><i class="fas fa-sign-out-alt fa-lg"></i></button>         
         </nav>
@@ -148,8 +151,8 @@
         </div>
         <section id="show-saved-todos" class="saved-todo">
             <!-- this new-todo is always visible while on the dashboard page -->
-            <article id="new-todo-div" class="todo new-todo">
-                <input type="text" id="todo-edit-title">
+            <article id="new-todo-div" class="todo new-todo new-todo-toggle-display">
+                <input type="text" class="todo-edit-title" id="todo-edit-title">
                 <input type="text" id="todo-list-title-input" name="todo-list-title-input" placeholder="Todo Name Please">
                 <input type="text" id="new-todo-item" name="new-todo-item" placeholder="Your Todo Please">
                 <ul id="a-todo-list">
@@ -164,6 +167,5 @@
             
         </section>
     </div>
-
 </body>
 </html>
