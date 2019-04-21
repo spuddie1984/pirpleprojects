@@ -531,10 +531,12 @@ const localStorageCheckerSetter = (elements, loggedInUser) => {
             // add the new user to localStorage and hide the signup form
             localStorage.setItem(newUser.email, JSON.stringify(newUser));
             document.querySelector("#signup-page").style.display = "none";
-            document.querySelector("#signup-form").reset();
+            
             // Lets go to the dashboard
             loggedIn(newUser, elements.querySelector("#user-signup-password").value);
 
+            // Reset the signup form values
+            document.querySelector("#signup-form").reset();
         }else{
             // that user already exists
             document.querySelector("#user-exists-error-message").style.display = "block";
