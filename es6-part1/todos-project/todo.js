@@ -77,7 +77,6 @@ const userSignOut = () => {
 function resetNewTodoDiv(div) {
     const inputs = div.querySelectorAll("input");
     const todoList = div.querySelector("#a-todo-list");
-    div.querySelector("#list-saved-message").style.display = "none";
     // reset all input values
     for(let input of inputs){
         input.value = "";
@@ -87,11 +86,13 @@ function resetNewTodoDiv(div) {
         todoList.removeChild(todoList.lastChild);
     }
     div.querySelector("#save-new-todo").style.display = "none";
+    div.querySelector("#new-todo-item").style.display = "none";
+    div.querySelector("#todo-list-title-input").style.display = "block";
+    
  } 
 
 // mark or delete a todo item
 function liCheckUncheck(event) {
-    document.querySelector("#list-saved-message").style.display = "none";
     if(event.target.classList.contains("trashbin")){
         event.target.parentNode.parentNode.removeChild(event.target.parentNode);
     
@@ -339,18 +340,39 @@ const loggedIn = (user, userSettingsPassword) => {
 
     // when enter is clicked move on to the next input
     const enterNewTodo = (keyboardEvent) => { 
-        document.querySelector("#list-saved-message").style.display = "none";
         newTodoDetails(keyboardEvent);    
     }
 
-    const saveNewTodo = () => {
-        document.querySelector("#list-saved-message").style.display = "block";
-        // use this to save to users localStorage and create a new list in their dashboard
-        const saveUserDetails = todoListSaverMaker(document.querySelector("#new-todo-div"));
-        addListToStorage(saveUserDetails, currentlyLoggedInUser,displaySavedLists);
-        document.querySelector("#new-todo-div").classList.add("new-todo-toggle-display");
-        resetNewTodoDiv(document.querySelector("#new-todo-div"));
-        document.querySelector("#new-todo-button").classList.remove("new-todo-button-toggle-display");
+    const saveNewTodo = (event) => {
+        // grab existing stored todos
+        const checkExistingTodoTitle = JSON.parse(localStorage.getItem(`${currentlyLoggedInUser}-list`));
+
+        // this function is used to reduce code repetition
+        const saver = () => {
+            // use this to save to users localStorage and create a new list in their dashboard
+            const saveUserDetails = todoListSaverMaker(document.querySelector("#new-todo-div"));
+            addListToStorage(saveUserDetails, currentlyLoggedInUser,displaySavedLists);
+            document.querySelector("#new-todo-div").classList.add("new-todo-toggle-display");
+            resetNewTodoDiv(document.querySelector("#new-todo-div"));
+            document.querySelector("#new-todo-button").classList.remove("new-todo-button-toggle-display");
+            document.querySelector("#todo-title-error-message").style.display = "none";
+        }
+
+        // callback for the every array method
+        // check for naming collisions with the new todo and previously saved todos
+        const checkTitle = (title) => {
+            return document.querySelector("#todo-edit-title").value !== title.todoTitle;
+        }
+        // no saved todos in localstorage so no need to check existing todos
+        if(checkExistingTodoTitle === null){
+            saver();
+        }else{
+            if(checkExistingTodoTitle.every(checkTitle)){
+                saver();
+            }else{
+                document.querySelector("#todo-title-error-message").style.display = "block";
+            }
+        }
     }
 
     // modify or delete displayed todos - A.K.A The tricky section
@@ -372,9 +394,10 @@ const loggedIn = (user, userSettingsPassword) => {
         }else if(event.target.classList.contains("saved-todos-changes-button")){
             // the details we will use to update localStorage
             const changeTodo = todoListSaverMaker(event.target.parentNode);
+            
             // use a data attribute as a reference to the targeted todo list
             const currentTodoTitle = event.target.parentNode.getAttribute("data-todo");
-  
+            
             // array every method callback
             const existingTodoTitleChecker = (todoItem) => {
                 // so that we can make changes to the todo list and not the title
