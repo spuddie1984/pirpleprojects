@@ -88,6 +88,7 @@ function resetNewTodoDiv(div) {
     div.querySelector("#save-new-todo").style.display = "none";
     div.querySelector("#new-todo-item").style.display = "none";
     div.querySelector("#todo-list-title-input").style.display = "block";
+    document.querySelector("#new-todo-title-message").style.display = "none";
     
  } 
 
@@ -117,6 +118,7 @@ function newTodoDetails(input) {
     const newLi = document.createElement("li");
     const todoList = document.querySelector("#a-todo-list");
     const saveTodo = document.querySelector("#save-new-todo");
+    const titleMessage = document.querySelector("#new-todo-title-message");
  
     // lets start the the todo list title
     if(input.target.id === "todo-list-title-input"){
@@ -131,6 +133,7 @@ function newTodoDetails(input) {
             todoTitle.style.visibility = "visible"
             if(todoTitle.style.visibility === "visible"){
                 todoItem.style.display = "flex";
+                titleMessage.style.display = "block";
             }
             else {
                 todoItem.style.display = "none";
