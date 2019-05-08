@@ -7,157 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- font awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <!-- custon css -->
     <link rel="stylesheet" type="text/css" media="screen" href="todo.css" />
     <!-- MD5 password hashing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
-    <script src="todo.js"></script>
+    <!-- html markup through template literals -->
+    <script src="markup.js"></script>
+    <!-- Main Js File(will be dynamically loaded here) -->
 </head>
 <body>
-    <!-- START PAGE SECTION -->
-    <div id="start-page">
     
-        <h1>The TODO Application</h1>
-        <p>Please Login or Signup so that you can start making a TODO list or add/modify an existing one.</p>
-    
-        <form id="start-form">
-            <button class="custom-button-styles" id="start-page-login-button">LogIn</button>
-            <button class="custom-button-styles" id="start-page-signup-button">SignUp</button>
-        </form>
-    
-    </div>
-    
-    <!-- LOGIN PAGE SECTION -->
-    <div id="login-page">
-        <!-- There are no name value's for simplicity reasons -->
-        <!-- login form -->
-        <form id="login-form">
-    
-            <div id="invalid-email-error-message">Please Enter a valid email Address</div>
+    <!-- Dynamically created content(via todo.js) will appear here -->
 
-            <!-- email input -->
-            <input type="email" placeholder="Email Address" id="user-email">
-
-            <!-- password input -->
-            <input type="password" placeholder="Password" id="user-password">
-
-            <div id="user-doesnt-exist-error-message">Sorry that user doesn't exist in our database, please signup !</div>
-            <div id="wrong-password-error-message">Wrong Password !!!</div>
-            <div id="login-form-error-message">Please fill in all the fields</div>
-
-            <button class="custom-button-styles" id="login-form-submit-button" type="submit">Login</button>
-            
-        </form>
-    
-    </div>
-
-    <!-- SIGNUP FORM SECTION -->
-    <div id=signup-page>
-        <!-- There are no name value's for simplicity reasons -->
-        <!-- signup form -->
-        <form id="signup-form">
-    
-            <div id="first-name-error-message">First Name Please</div>
-
-            <!-- new users first name -->
-            <input type="text" placeholder="First Name" id="first-name">
-
-            <div id="last-name-error-message">Last Name Please</div>
-
-            <!-- new users last name -->
-            <input type="text" placeholder="Last Name" id="last-name">
-    
-            <div id="email-error-message">Valid Email Please</div>
-
-            <!-- new users email address -->
-            <input type="email" placeholder="Email Address" id="user-signup-email">
-
-            <div id="password-error-message">Password Please</div>
-
-            <!-- new users password -->
-            <input type="password" placeholder="Password"  id="user-signup-password">
-                
-            <div id="terms-error-message">Please click the terms box</div>
-
-            <!-- agree to terms checkbox -->
-            <label id="terms">
-                <input type="checkbox" id="terms-checkbox">
-                <span id="terms-of-use">I Agree to the Terms of Use</span>
-            </label> 
-
-            <div id="signup-form-error-message">Please fill out all the details</div>
-            <div id="user-exists-error-message">Sorry that users email already exists, please use a different one</div>
-
-            <!-- a button to submit all the data -->
-            <button class="custom-button-styles" id="signupFormSubmitButton" type="submit">Sign Up</button>
-    
-        </form>
-    
-    </div>
-
-    <!-- DASHBOARD PAGE SECTION -->
-    <div id="dashboard-page">
-    
-        <nav class="nav-menu">
-            <button class="alt-button-style nav-menu-buttons" id="new-todo-button"><i class="fas fa-plus fa-2x"></i></button>
-            <button class="alt-button-style nav-menu-buttons" id="user-settings-button"><i class="fas fa-sliders-h fa-lg"></i></button>
-            <button class="alt-button-style nav-menu-buttons" id="user-signout"><i class="fas fa-sign-out-alt fa-lg"></i></button>         
-        </nav>
-        <div id="user-settings" class="user-settings-div">
-            <button class="user-settings-close-button"><i class="fas fa-times fa-3x"></i></button>
-            <h2>User Settings</h2>
-            <p id="changes-reminder">After selecting and changing any details please press the save button for the changes to be saved</p>
-            
-            <div id="user-details-error-message">Only a valid name or email please !!</div>
-            
-            <section id="user-details-section">
-                
-                <div id="first-name-div">
-                    <label for="first-name-change" id="first-name-label">First Name</label>
-                    <input id="first-name-change">
-                </div>
-                <div id="last-name-div">
-                    <label for="last-name-change" id="last-name-label">Last Name</label>
-                    <input id="last-name-change">
-                </div>
-                <div id="password-div">
-                    <label for="password-change" id="password-label">Current Password</label>
-                    <input type="password" id="password-change" disabled>
-                    <button class="custom-button-styles" id="show-password-button">Show Password</button>
-                </div>
-            </section>
-            
-            <label class="new-password-label">New Password <em>(Only applicable if to be changed)</em> :
-                <input type="password" class="new-password-input" id="new-password" placeholder="New Password Please">
-                <input type="password" class=" new-password-input" placeholder="Re-enter new password" id="re-entered-password">
-            </label>
-            
-            <div id="new-password-error-message">Your Password doesnt match </div>
-
-            <div id="user-details-success">Your details were successfully saved</div>
-
-            <button class="custom-button-styles change-details-button" id="submit-user-detail-changes">Save</button>
-            
-            <p id="delete-button-message"><strong>If you press this button all account details including lists will be deleted !!</strong></p>
-            
-            <button class="custom-button-styles delete-account-button" id="delete-user-button">Delete Account</button>
-        </div>
-        <section id="show-saved-todos" class="saved-todo">
-            <!-- this new-todo is always visible while on the dashboard page -->
-            <article id="new-todo-div" class="todo new-todo new-todo-toggle-display">
-                <input type="text" class="todo-edit-title" id="todo-edit-title">
-                <input type="text" id="todo-list-title-input" name="todo-list-title-input" placeholder="Todo Name Please">
-                <input type="text" id="new-todo-item" name="new-todo-item" placeholder="Your Todo Please">
-                <ul id="a-todo-list">
-                    
-                </ul>
-                <div id="list-saved-message">Your List was Saved !!!</div>
-                <div id="todo-title-error-message">Sorry that title already exists</div>
-                <button class="custom-button-styles" id="save-new-todo">Save</button>
-            </article>
-
-            <!-- saved todo's will show in the browser here(dynamically loaded) -->
-            
-        </section>
-    </div>
 </body>
 </html>

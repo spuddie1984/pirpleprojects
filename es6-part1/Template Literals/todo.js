@@ -7,168 +7,6 @@
 // - ui redesign maybe ???
 ////////////////////////////////// GENERAL /////////////////////////////////////
 
-
-// Start Page Markup and Details
-// Have also included the class and id names to be loaded by javascript
-const stPgData = {
-    "id"          : "start-page",
-    "title"       : "The Todo Application",
-    "Description" : "Please Login or Signup so that you can start making a TODO list or add/modify an existing one."
-}
-const stPgDataForm = {
-    "id"       : "start-form",
-    "buttons"  : [{
-        "class" : "custom-button-styles",
-        "id"    : "start-page-login-button",
-        "text"  : "Login",
-    },
-    {
-        "class" : "custom-button-styles",
-        "id"    : "start-page-signup-button",
-        "text"  : "SignUp",
-    }]
-}
-
-const startPageTemplate = `
-    // START PAGE SECTION
-    <div id="${stPgData.id}">
-        
-        <h1>${stPgData.title}</h1>
-        <p>${stPgData.Description}</p>
-        
-        <form id="${stPgDataForm.id}">
-            <button class="${stPgDataForm.id}" id="${stPgDataForm.buttons[0].id}">${stPgDataForm.buttons[0].text}</button>
-            <button class="${stPgDataForm.buttons[1].class}" id="${stPgDataForm.buttons[1].id}">${stPgDataForm.buttons[1].text}</button>
-        </form>
-
-    </div>
-`
-console.log(startPageTemplate);
-
-// Login Page and Details
-const lgnPgData = {
-    "id"   : "login-page",
-}
-
-const lgnPgDataForm = {
-    "id": "login-form",
-    "email-error-message" : {
-        "id"   : "invalid-email-error-message",
-        "text" : "Please Enter a valid email Address"
-    },
-    "inputs" : [{
-        "type"        : "email",
-        "placeholder" : "Email Address",
-        "id"          : "user-email"
-    },
-    {
-        "type"        : "password",
-        "placeholder" : "Password",
-        "id"          : "user-password"
-    }],
-    
-    "user-doesnt-exist-error-message" : {
-        "id"   : "user-doesnt-exist-error-message",
-        "text" : "Sorry that user doesn't exist in our database, please signup !"
-    },
-    "wrong-password-error-message" : {
-        "id"   : "wrong-password-error-message",
-        "text" : "Wrong Password !!!"
-    },
-    "login-form-error-message" : {
-        "id"   : "login-form-error-message",
-        "text" : "Please fill in all the fields"
-    },
-    "buttons" : [{
-        "class" : "custom-button-styles",
-        "id"    : "login-form-submit-button",
-        "text"  : "Login"
-    }]
-
-}
-// Signup Page and Details
-const sgnUpPgData = {
-    "id"   : "signup-page",
-    "form" : {
-        "id" : "signup-form",
-        "first-name-error-message" : {
-            "id"   : "first-name-error-message",
-            "text" : "First Name Please"
-        },
-        "inputs" : [{
-            "type"        : "text",
-            "placeholder" : "First Name",
-            "id"          : "first-name"
-        },{
-            "type"        : "text",
-            "placeholder" : "Last Name",
-            "id"          : "last-name"
-        },{
-            "type"        : "email",
-            "placeholder" : "Email Address",
-            "id"          : "user-signup-email"
-        },{
-            "type"        : "password",
-            "placeholder" : "Password",
-            "id"          : "user-signup-password"
-        },{
-            "type" : "checkbox",
-            "id"   : "terms-checkbox"
-        }],
-        "input-error-messages" : [{
-            "id"   : "first-name-error-message",
-            "text" : "First Name Please"
-        },{
-            "id"   : "last-name-error-message",
-            "text" : "Last Name Please"
-        },{
-            "id"   : "email-error-message",
-            "text" : "Valid Email Please"
-        },{
-            "id"   : "password-error-message",
-            "text" : "Password Please"
-        },{
-            "id"   : "terms-error-message",
-            "text" : "Please click the terms box"
-        }]
-    }
-}
-
-// Dashboard Page and Details
-const dhbdPgData = {
-    "id"  : "dashboard-page",
-    "nav" : {
-        "class"   : "nav-menu",
-        "buttons" : [{
-            "class" : ["alt-button-style", "nav-menu-buttons"],
-            "id"    : "new-todo-button",
-            "text"  : "<i class='fas fa-plus fa-2x'></i>"
-        },{
-            "class" : ["alt-button-style", "nav-menu-buttons"],
-            "id"    : "user-settings-button",
-            "text"  : "<i class='fas fa-sliders-h fa-lg'></i>"
-        },{
-            "class" : ["alt-button-style", "nav-menu-buttons"],
-            "id"    : "user-signout",
-            "text"  : "<i class='fas fa-sign-out fa-lg'></i>"
-        }],
-    } 
-}
-
-const dhbdPgDataUsrDtls = {
-    "id"      : "user-settings",
-    "class"   : "user-settings-div",
-    "buttons" : [{
-        "class" : "user-settings-close-button",
-        "text"  : "<i class='fas fa-times fa-3x'></i>"
-    }],
-    "h2"      : "User Settings",
-    "p"       : {
-        "id"   : "changes-reminder",
-        "text" : "After selecting and changing any details please press the save button for the changes to be saved"
-    }
-}
-
 // On Page refresh or Reload reset the login section, 
 // signup section and dashboard section to display:none
 // function called in the startPageLoad function 
@@ -239,7 +77,6 @@ const userSignOut = () => {
 function resetNewTodoDiv(div) {
     const inputs = div.querySelectorAll("input");
     const todoList = div.querySelector("#a-todo-list");
-    div.querySelector("#list-saved-message").style.display = "none";
     // reset all input values
     for(let input of inputs){
         input.value = "";
@@ -249,11 +86,13 @@ function resetNewTodoDiv(div) {
         todoList.removeChild(todoList.lastChild);
     }
     div.querySelector("#save-new-todo").style.display = "none";
+    div.querySelector("#new-todo-item").style.display = "none";
+    div.querySelector("#todo-list-title-input").style.display = "block";
+    document.querySelector("#new-todo-title-message").style.display = "none";
  } 
 
 // mark or delete a todo item
 function liCheckUncheck(event) {
-    document.querySelector("#list-saved-message").style.display = "none";
     if(event.target.classList.contains("trashbin")){
         event.target.parentNode.parentNode.removeChild(event.target.parentNode);
     
@@ -278,6 +117,7 @@ function newTodoDetails(input) {
     const newLi = document.createElement("li");
     const todoList = document.querySelector("#a-todo-list");
     const saveTodo = document.querySelector("#save-new-todo");
+    const titleMessage = document.querySelector("#new-todo-title-message");
  
     // lets start the the todo list title
     if(input.target.id === "todo-list-title-input"){
@@ -292,6 +132,7 @@ function newTodoDetails(input) {
             todoTitle.style.visibility = "visible"
             if(todoTitle.style.visibility === "visible"){
                 todoItem.style.display = "flex";
+                titleMessage.style.display = "block";
             }
             else {
                 todoItem.style.display = "none";
@@ -501,18 +342,39 @@ const loggedIn = (user, userSettingsPassword) => {
 
     // when enter is clicked move on to the next input
     const enterNewTodo = (keyboardEvent) => { 
-        document.querySelector("#list-saved-message").style.display = "none";
         newTodoDetails(keyboardEvent);    
     }
 
     const saveNewTodo = () => {
-        document.querySelector("#list-saved-message").style.display = "block";
-        // use this to save to users localStorage and create a new list in their dashboard
-        const saveUserDetails = todoListSaverMaker(document.querySelector("#new-todo-div"));
-        addListToStorage(saveUserDetails, currentlyLoggedInUser,displaySavedLists);
-        document.querySelector("#new-todo-div").classList.add("new-todo-toggle-display");
-        resetNewTodoDiv(document.querySelector("#new-todo-div"));
-        document.querySelector("#new-todo-button").classList.remove("new-todo-button-toggle-display");
+         // grab existing stored todos
+         const checkExistingTodoTitle = JSON.parse(localStorage.getItem(`${currentlyLoggedInUser}-list`));
+
+         // this function is used to reduce code repetition
+         const saver = () => {
+             // use this to save to users localStorage and create a new list in their dashboard
+             const saveUserDetails = todoListSaverMaker(document.querySelector("#new-todo-div"));
+             addListToStorage(saveUserDetails, currentlyLoggedInUser,displaySavedLists);
+             document.querySelector("#new-todo-div").classList.add("new-todo-toggle-display");
+             resetNewTodoDiv(document.querySelector("#new-todo-div"));
+             document.querySelector("#new-todo-button").classList.remove("new-todo-button-toggle-display");
+             document.querySelector("#todo-title-error-message").style.display = "none";
+         }
+ 
+         // callback for the every array method
+         // check for naming collisions with the new todo and previously saved todos
+         const checkTitle = (title) => {
+             return document.querySelector("#todo-edit-title").value !== title.todoTitle;
+         }
+         // no saved todos in localstorage so no need to check existing todos
+         if(checkExistingTodoTitle === null){
+             saver();
+         }else{
+             if(checkExistingTodoTitle.every(checkTitle)){
+                 saver();
+             }else{
+                 document.querySelector("#todo-title-error-message").style.display = "block";
+             }
+         }
     }
 
     // modify or delete displayed todos - A.K.A The tricky section
@@ -838,7 +700,7 @@ const submitButton = (event) => {
 // When the page is reloaded or refreshed this function will run
 // function for pageLoad event listener
 const startPageLoad = () => {
-
+    
     // On refresh or fresh load of the page, set all the elements
     // (except for the start-page) to display:none 
     pageRestart();
@@ -852,6 +714,6 @@ const startPageLoad = () => {
 }
 
 // page load or page refresh event listener
-document.addEventListener("DOMContentLoaded", startPageLoad);
-
+// document.addEventListener("DOMContentLoaded", startPageLoad);
+startPageLoad();
 ///////////////////////////////////////////////////////////////////////////////////
