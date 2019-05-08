@@ -343,7 +343,7 @@ const loggedIn = (user, userSettingsPassword) => {
         newTodoDetails(keyboardEvent);    
     }
 
-    const saveNewTodo = (event) => {
+    const saveNewTodo = () => {
         // grab existing stored todos
         const checkExistingTodoTitle = JSON.parse(localStorage.getItem(`${currentlyLoggedInUser}-list`));
 
