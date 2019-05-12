@@ -2,6 +2,7 @@
  * There are no name values in any of the form inputs
  * (not really neccessary for this project because we are using local storage)
  *  using loops to decrease repetition and follow the DRY principle 
+ * Separation of Markup from the js main file
  */
 
 // create a script element so that we can load the main js file when we choose to
