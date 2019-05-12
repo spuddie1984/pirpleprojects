@@ -5,6 +5,9 @@
 // - refine css a bit messy
 // - if refactoring the whole project i will follow oop style instead would be much cleaner
 // - ui redesign maybe ???
+//    BUGS
+// - error messages
+// - 
 ////////////////////////////////// GENERAL /////////////////////////////////////
 
 // On Page refresh or Reload reset the login section, 

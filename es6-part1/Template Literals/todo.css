@@ -160,6 +160,7 @@ input:focus{
     position: sticky;
     top: 0;
     background-color: grey;
+    z-index: 100;
 }
 
 /* style the dashboard buttons differently to the rest of the application */
