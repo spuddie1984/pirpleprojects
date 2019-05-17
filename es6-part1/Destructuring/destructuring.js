@@ -1,0 +1,10 @@
+/*
+ What is the differences between destructuring an object and destructuring an array? When would each be appropriate too use?In your own words, write 1 - 2 paragraphs explaining the different use-cases for each.
+
+Create a file called destructuring.js and add your explanation as comments at the top of the page. Then, within the document write 2 code examples (1 for objects, 1 for arrays) showcasing the use-cases you explained above.
+
+Extra Credit:
+
+To earn extra credit, add explanations and examples for destructuring nested objects (objects within objects), and nested arrays (arrays within arrays).
+
+*/
