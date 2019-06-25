@@ -12,10 +12,10 @@ def equalityChecker(param1,param2,param3):
         return False
 
 # modify the numbers below to test
-#print(equalityChecker(2,1,1))# True
+# print(equalityChecker(2,1,1))# True
 
 # lets do a few tests anyway
-#print(equalityChecker("test","tested","testing"))# False
+# print(equalityChecker("test","tested","testing"))# False
 #print(equalityChecker("test","test","TEST"))# True
 #print(equalityChecker(2,3,4))# False
 
@@ -43,7 +43,7 @@ def equalityIntChecker1(input1,input2,input3):
     else:
         return False
 
-print(equalityIntChecker1(1,"2",2))# True
+# print(equalityIntChecker1(1,"2",2))# True
 
 # 2
 def equalityIntChecker2(param1,param2,param3):
@@ -57,5 +57,5 @@ def equalityIntChecker2(param1,param2,param3):
         return False
 
 # convert any integer like strings to integers during function call
-print(equalityIntChecker2(int(1),int("2"),int(2)))# True
+# print(equalityIntChecker2(int(1),int("2"),int(2)))# True
 print(equalityIntChecker2(int("1"),int("2"),int("1")))# True 
