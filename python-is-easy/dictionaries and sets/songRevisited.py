@@ -5,9 +5,19 @@ Then refactor your print statements so that it's a single loop that passes throu
 in the dictionary and prints out it's key and then it's value.
 """
 myFavouriteSong = {
-    
+    "song": "Wild at Heart",
+    "album": "Birds of Tokyo",
+    "releaseYear": 2010,
+    "releaseDate": "17th of December 2010",
+    "songLengthInSeconds": 240,
+    "artist": "Birds of Tokyo",
+    "band": "Yes",
+    "placeBandFormed": "Perth, Western Australia",
+    "genre": "Hard Rock"
 }
 
+for item in myFavouriteSong:
+    print(f"{item}: {myFavouriteSong[item]}")
 
 """
 Extra Credit:
@@ -16,3 +26,5 @@ and find out if they were right or wrong. This function should accept two parame
 Key and Value. If the key exists in the dictionary and that value is the correct value, 
 then the function should return true. In all other cases, it should return false.
 """
+def guessTheValue(Key,Value):
+    print()
