@@ -81,7 +81,7 @@ const lgnPgDataForm = {
         "text" : "Sorry that user doesn't exist in our database, please signup !"
     },{
         "id"   : "login-form-error-message",
-        "text" : "Please fill in all the fields"
+        "text" : "Please fill in Fields correctly i.e valid email address"
     }],
     "buttons" : {
         "type"  : "submit",
